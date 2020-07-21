@@ -1,5 +1,5 @@
 # CS Project
-An [A Level][alevel] Computer Science project where students complete coding tasks in [Python][python] set by their teachers.
+An [A Level][alevel] Computer Science project where students complete coding tasks in [Python][python] set by their teachers. It is based in the browser. Users submit their code online. This code is then executed on the server and the output is sent back to the user.
 
 ## Project Requirements
 - [ ] Login system

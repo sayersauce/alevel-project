@@ -1,0 +1,27 @@
+::-moz-selection {
+    color: white;
+    background: #252525;
+}
+  
+::selection {
+    color: white;
+    background: #252525;
+}
+
+html, body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, b {
+    color: #222;
+}
+
+p {
+    color: #444;
+}
+
+a {
+    text-decoration: none;
+    color: dodgerblue;
+}
