@@ -1,5 +1,5 @@
 # CS Project
-An [A Level][https://en.wikipedia.org/wiki/GCE_Advanced_Level] Computer Science project where students complete coding tasks in [Python][python] set by their teachers.
+An [A Level][alevel] Computer Science project where students complete coding tasks in [Python][python] set by their teachers.
 
 ## Project Requirements
 - [ ] Login system
