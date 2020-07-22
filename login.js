@@ -15,7 +15,8 @@ exports.loginSubmit = function(req, res) {
     res.send(req.body);
 }
 
-exports.signupSubmit = function(req, res) {
+exports.signupSubmit = function(req, res, insertUser) {
     console.log(req.body);
     res.send(req.body);
+    insertUser(req.body.username, req.body.password)
 }
