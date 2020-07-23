@@ -2,6 +2,8 @@
  * Login and Sign Up Routes
  */
 
+const db = require("./database");
+
 exports.login = function(req, res) {
     res.render("pages/login");
 }
@@ -15,8 +17,8 @@ exports.loginSubmit = function(req, res) {
     res.send(req.body);
 }
 
-exports.signupSubmit = function(req, res, insertUser) {
+exports.signupSubmit = function(req, res) {
     console.log(req.body);
     res.send(req.body);
-    insertUser(req.body.username, req.body.password)
+    db.insertUser(req.body.username, req.body.password)
 }

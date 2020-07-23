@@ -1,0 +1,28 @@
+#ide {
+    min-width: 400px;
+    min-height: 200px;
+    max-width: 1000px;
+    max-height: 500px;
+    width: 1000px;
+    height: 500px;
+    font-family: monospace;
+    text-align: left;
+    outline: none;
+    background: #15171a;
+    color: #eee;
+    border: 1px solid #060606;
+    counter-reset: linecount;
+    overflow-y: scroll;
+}
+
+#ide div {
+    counter-increment: linecount;
+}
+
+#ide div:before {
+    display: inline-block;
+    text-align: center;
+    min-width: 40px;
+    content: counter(linecount);
+    color: #bbb;
+}

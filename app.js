@@ -20,14 +20,17 @@ app.set("view engine", "ejs");
 
 app.get("/", site.index);
 app.get("/login", login.login);
-app.post("/login", login.loginSubmit);
 app.get("/signup", login.signup);
-app.post("/signup", (req, res) => { login.signupSubmit(req, res, db.insertUser) });
 app.get("/users", (req, res) => {
     db.getUsers((rows) => {
         res.send(rows);
     });
 });
+app.get("/code", (req, res) => res.render("pages/code"))
+
+app.post("/login", login.loginSubmit);
+app.post("/signup", login.signupSubmit);
+
 app.use(function (req, res) {
     res.status(404);
     res.render("pages/404");
