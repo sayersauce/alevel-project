@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <% if (users) { %>
+        <table>
+            <h3>Users</h3>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Class</th>
+            </tr>
+            <% for (let user of users) { %>
+                <tr>
+                    <td><%= user.ID %></td>
+                    <td><%= user.USERNAME %></td>
+                    <td><%= user.CLASS %></td>
+                </tr>
+            <% } %>
+        </table>
+    <% } %>
+    <% if (classes) { %>
+        <table>
+            <h3>Classes</h3>
+            <tr>
+                <th>Token</th>
+                <th>Class Name</th>
+            </tr>
+            <% for (let c of classes) { %>
+                <tr>
+                    <td><%= c.TOKEN %></td>
+                    <td><%= c.NAME %></td>
+                </tr>
+            <% } %>
+        </table>
+    <% } %>
+
+</body>
+</html>
+ 

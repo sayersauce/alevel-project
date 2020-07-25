@@ -6,8 +6,9 @@ const express = require("express");
 const app = express();
 const port = 80;
 
-const site = require("./site");
-const login = require("./login");
+const site = require("./routes/site");
+const login = require("./routes/login");
+const admin = require("./routes/admin");
 const db = require("./database");
 
 // Config
@@ -26,7 +27,8 @@ app.get("/users", (req, res) => {
         res.send(rows);
     });
 });
-app.get("/code", (req, res) => res.render("pages/code"))
+app.get("/code", site.code);
+app.get("/admin", admin.admin);
 
 app.post("/login", login.loginSubmit);
 app.post("/signup", login.signupSubmit);
