@@ -4,40 +4,57 @@
     <%- include ("../partials/head") %>
 </head>
 <body>
-    <h1>Admin Page</h1>
-    <% if (users) { %>
+    <div class="content">
+        <%- include ("../partials/nav") %>
+        <h1>Administration</h1>
         <table>
             <h3>Users</h3>
             <tr>
                 <th>ID</th>
                 <th>Username</th>
                 <th>Class</th>
+                <th>Register Date</th>
+                <th>Last Login</th>
+                <th>Delete</th>
             </tr>
             <% for (let user of users) { %>
                 <tr>
                     <td><%= user.ID %></td>
                     <td><%= user.USERNAME %></td>
                     <td><%= user.CLASS %></td>
+                    <td><%= new Date(user.REGISTERDATE).toUTCString() %></td>
+                    <td><%= new Date(user.LOGINDATE).toUTCString() %></td>
+                    <td>
+                        <form method="POST" action="/deluser">
+                            <input type="hidden" name="id" value="<%= user.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
                 </tr>
             <% } %>
         </table>
-    <% } %>
-    <% if (classes) { %>
         <table>
             <h3>Classes</h3>
             <tr>
                 <th>Token</th>
                 <th>Class Name</th>
+                <th>Delete</th>
             </tr>
             <% for (let c of classes) { %>
                 <tr>
                     <td><%= c.TOKEN %></td>
                     <td><%= c.NAME %></td>
+                    <td>
+                        <form method="POST" action="/deltoken">
+                            <input type="hidden" name="token" value="<%= c.TOKEN %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
                 </tr>
             <% } %>
         </table>
-    <% } %>
-
+    </div>
+    <%- include ("../partials/footer") %>
 </body>
 </html>
  

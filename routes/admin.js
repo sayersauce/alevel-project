@@ -11,3 +11,15 @@ exports.admin = function(req, res) {
         });
     });
 }
+
+exports.delUser = function(req, res) {
+    let id = req.body.id;
+    db.deleteUser(id);
+    res.redirect("/admin");
+}
+
+exports.delToken = function(req, res) {
+    let token = req.body.token;
+    db.deleteToken(token);
+    res.redirect("/admin");
+}

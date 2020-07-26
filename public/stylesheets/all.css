@@ -25,6 +25,11 @@
 
 html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+body {
+    margin: 0 10vw;
 }
 
 h1, h2, h3, h4, h5, h6, b {
@@ -38,6 +43,15 @@ p {
 a {
     text-decoration: none;
     color: dodgerblue;
+    transition: color 300ms;
+}
+
+a:hover {
+    color: royalblue;
+}
+
+table {
+    width: 100%;
 }
 
 table, tr, td, th {
@@ -50,10 +64,92 @@ td, th {
 
 th {
     background-color: #777;
+    border: 1px solid #666;
     color: #fff;
 }
 
 td {
     background-color: #eee;
-    border-bottom: 1px solid #bbb;
+    border: 1px solid #ccc;
+}
+
+.x {
+    border: none;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    width: 100%;
+    padding: 10px;
+    transition: color 200ms;
+}
+
+.x:hover {
+    color: red;
+    cursor: pointer;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80vw;
+    height: 50px;
+    margin: -51px 0 0 -10vw;
+    padding: 0 10vw;
+    border-top: 1px solid #ddd;
+}
+
+footer p, footer a {
+    color: #888;
+}
+
+footer a:hover {
+    color: #666;
+}
+
+footer #credit {
+    color: dodgerblue;
+}
+
+footer #credit:hover {
+    color: royalblue;
+}
+
+.content {
+    min-height: 100vh;
+}
+
+header {
+    width: 80vw;
+    margin: 0 0 0 -10vw;
+    padding: 0 10vw;
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+header #title {
+    margin: 0;
+    padding: 10px 0;
+    width: 50%;
+}
+
+header #titletext {
+    margin: 0;
+    color: #444;
+    transition: color 300ms;
+}
+
+header #titletext:hover {
+    color: #222;
+}
+
+header #links {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+header #links a {
+    margin: 0 0 0 20px;
 }

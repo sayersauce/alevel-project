@@ -31,6 +31,8 @@ app.get("/code", site.code);
 app.get("/admin", admin.admin);
 
 app.post("/login", login.loginSubmit);
+app.post("/deluser", admin.delUser);
+app.post("/deltoken", admin.delToken);
 app.post("/signup", login.signupSubmit);
 
 app.use(function (req, res) {
