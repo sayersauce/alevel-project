@@ -18,15 +18,18 @@ router.get("/", (req, res) => {
     });
 });
 
+router.post("/createtoken", (req, res) => {
+    db.createToken(req.body.className);
+    res.redirect("/admin");
+});
+
 router.post("/deluser", (req, res) => {
-    let id = req.body.id;
-    db.deleteUser(id);
+    db.deleteUser(req.body.id);
     res.redirect("/admin");
 });
 
 router.post("/deltoken", (req, res) => {
-    let token = req.body.token;
-    db.deleteToken(token);
+    db.deleteToken(req.body.token);
     res.redirect("/admin");
 });
 

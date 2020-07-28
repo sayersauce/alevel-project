@@ -7,6 +7,13 @@
     <div class="content">
         <%- include ("../partials/nav") %>
         <h1>Administration</h1>
+
+        <form method="POST" action="/admin/createtoken">
+            <label for="className">Generate an Access Token for a Class.</label>
+            <input type="text" name="className" placeholder="Class Name" required>
+            <input type="submit" value="Generate Token">
+        </form>
+
         <table>
             <h3>Users</h3>
             <tr>
@@ -22,8 +29,8 @@
                     <td><%= user.ID %></td>
                     <td><%= user.USERNAME %></td>
                     <td><%= user.CLASS %></td>
-                    <td><%= new Date(user.REGISTERDATE).toUTCString() %></td>
-                    <td><%= new Date(user.LOGINDATE).toUTCString() %></td>
+                    <td><%= new Date(user.REGISTERDATE).toLocaleString() %></td>
+                    <td><%= new Date(user.LOGINDATE).toLocaleString() %></td>
                     <td>
                         <form method="POST" action="/admin/deluser">
                             <input type="hidden" name="id" value="<%= user.ID %>">
@@ -33,6 +40,7 @@
                 </tr>
             <% } %>
         </table>
+
         <table>
             <h3>Classes</h3>
             <tr>

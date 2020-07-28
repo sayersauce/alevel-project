@@ -2,7 +2,6 @@
  * SQLite3 Database Functions
  */
 
-
 const sqlite3 = require("sqlite3").verbose();
 
 let db = new sqlite3.Database("database.db");
@@ -40,12 +39,12 @@ function getUsers(callback) {
     });
 }
 
-function insertUser(username, password, token, callback) {
+function insertUser(username, hash, token, callback) {
     // Check if user has provided a valid access token
     getClass(token, className => {
         if (className) {
             let datetime = new Date().toISOString();
-            db.run("INSERT INTO Users(USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?)", [username, password, className, datetime, datetime]);
+            db.run("INSERT INTO Users(USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?)", [username, hash, className, datetime, datetime]);
             callback(true);
         } else {
             callback(false);
@@ -85,6 +84,42 @@ function loginUser(username) {
 // Classes
 
 
+function createToken(className) {
+    // Creates a new access token for a class
+    // Get current tokens in table to avoid repeats
+    db.all("SELECT TOKEN FROM Classes", (err, tokens) => {
+        if (err) {
+            console.error(err);
+        }
+
+        let repeat = true;
+        let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        let token;
+
+        // Generate random tokens until one is made which isn't in the table already
+        while (repeat) {
+            token = "";
+            repeat = false;
+
+            for (let i = 0; i < 6; i++) {
+                token += chars[Math.floor(Math.random() * chars.length)]
+            }
+
+            // Check if the token generated is a repeat
+            for (let t of tokens) {
+                if (t.TOKEN == token) repeat = true;
+            }
+        }
+
+        db.run("INSERT INTO Classes VALUES(?, ?)", [token, className], (err) => {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
+}
+
+
 function getClass(token, callback) {
     // Find the name of a class (group) based on its token and if it exists, pass it into a callback
     db.get("SELECT NAME name FROM Classes WHERE TOKEN = ?", token, (err, row) => {
@@ -120,6 +155,6 @@ function deleteToken(token) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken};
 
 init();
