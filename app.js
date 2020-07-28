@@ -3,6 +3,7 @@
  */
 
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const port = 80;
 
@@ -15,7 +16,19 @@ const db = require("./database");
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false
+}));
 app.set("view engine", "ejs");
+
+// Middleware
+
+app.use((req, res, next) => {
+    if (req.session.username) console.log("User logged in as " + req.session.username);
+    next();
+});
 
 // Routing
 
@@ -28,14 +41,13 @@ app.get("/users", (req, res) => {
     });
 });
 app.get("/code", site.code);
-app.get("/admin", admin.admin);
+
+app.use("/admin", admin);
 
 app.post("/login", login.loginSubmit);
-app.post("/deluser", admin.delUser);
-app.post("/deltoken", admin.delToken);
 app.post("/signup", login.signupSubmit);
 
-app.use(function (req, res) {
+app.use((req, res) => {
     res.status(404);
     res.render("pages/404");
 });

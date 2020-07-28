@@ -1,25 +1,33 @@
 /**
- * Admin Page Route
+ * Admin Page Router
  */
 
 const db = require("../database");
+const router = require("express").Router();
 
-exports.admin = function(req, res) {
+router.use((req, res, next) => {
+    // admin middleware here
+    next()
+});
+
+router.get("/", (req, res) => {
     db.getUsers(users => {
         db.getClasses(classes => {
             res.render("pages/admin", { users: users, classes: classes });
         });
     });
-}
+});
 
-exports.delUser = function(req, res) {
+router.post("/deluser", (req, res) => {
     let id = req.body.id;
     db.deleteUser(id);
     res.redirect("/admin");
-}
+});
 
-exports.delToken = function(req, res) {
+router.post("/deltoken", (req, res) => {
     let token = req.body.token;
     db.deleteToken(token);
     res.redirect("/admin");
-}
+});
+
+module.exports = router;

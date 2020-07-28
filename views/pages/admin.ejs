@@ -25,7 +25,7 @@
                     <td><%= new Date(user.REGISTERDATE).toUTCString() %></td>
                     <td><%= new Date(user.LOGINDATE).toUTCString() %></td>
                     <td>
-                        <form method="POST" action="/deluser">
+                        <form method="POST" action="/admin/deluser">
                             <input type="hidden" name="id" value="<%= user.ID %>">
                             <input class="x" type="submit" value="x">
                         </form>
@@ -45,7 +45,7 @@
                     <td><%= c.TOKEN %></td>
                     <td><%= c.NAME %></td>
                     <td>
-                        <form method="POST" action="/deltoken">
+                        <form method="POST" action="/admin/deltoken">
                             <input type="hidden" name="token" value="<%= c.TOKEN %>">
                             <input class="x" type="submit" value="x">
                         </form>

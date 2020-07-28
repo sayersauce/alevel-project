@@ -62,6 +62,25 @@ function deleteUser(id) {
     });
 }
 
+function getUser(username, callback) {
+    // Returns a user from the Users table if they exist
+    db.get("SELECT * FROM Users WHERE USERNAME = ?", username, (err, row) => {
+        if (err) {
+            console.error(err);
+        }
+        callback(row);
+    });
+}
+
+function loginUser(username) {
+    // Updates a user's login date if they exist
+    db.run("UPDATE Users SET LOGINDATE = ? WHERE USERNAME = ?", [new Date().toISOString(), username], (err) => {
+        if (err) {
+            console.error(err);
+        }
+    })
+}
+
 
 // Classes
 
@@ -101,6 +120,6 @@ function deleteToken(token) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser};
 
 init();
