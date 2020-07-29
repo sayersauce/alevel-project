@@ -1,8 +1,6 @@
 /**
- * Signup Page JavaScript
+ * Repeat Password Validation
  */
-
-// Repeat password validation
 
 const passwd = document.getElementById("password");
 const repeat = document.getElementById("repeat");

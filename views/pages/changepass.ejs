@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../partials/head") %>
+    <link rel="stylesheet" href="stylesheets/login.css">
+    <script defer src="scripts/repeat.js"></script>
+</head>
+<body>
+    <div>
+        <h1>Change Password</h1>
+        <form method="POST" action="/change">
+            <% if (message) { %>
+                <p id="message"><%= message %></p>
+            <% } %>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" id="oldpassword" name="oldpassword" placeholder="Old Password" required>
+            <input type="password" id="password" name="password" placeholder="New Password" required>
+            <input type="password" id="repeat" name="repeat" placeholder="Repeat New Password" required>
+            <input type="submit" value="Change Password">
+        </form>
+    </div>
+</body>
+</html>

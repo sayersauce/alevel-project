@@ -23,6 +23,7 @@
             <tr>
                 <th>ID</th>
                 <th>Username</th>
+                <th>Email</th>
                 <th>Class</th>
                 <th>Register Date</th>
                 <th>Last Login</th>
@@ -32,6 +33,7 @@
                 <tr>
                     <td><%= user.ID %></td>
                     <td><%= user.USERNAME %></td>
+                    <td><%= user.EMAIL %></td>
                     <td><%= user.CLASS %></td>
                     <td><%= new Date(user.REGISTERDATE).toLocaleString() %></td>
                     <td><%= new Date(user.LOGINDATE).toLocaleString() %></td>

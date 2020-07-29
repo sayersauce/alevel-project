@@ -2,10 +2,13 @@
 An [A Level][alevel] Computer Science project where students complete coding tasks in [Python][python] set by their teachers. It is based in the browser. Users submit their code online. This code is then executed on the server and the output is sent back to the user.
 
 ## Project Requirements
+- [x] JSON configuration file
+- [ ] Automatic configuration file generation
 - [x] Login system
 - [x] Administrator accounts
 - [x] Sign-Up system with access codes
-- [ ] Reset password
+- [x] Reset password
+- [x] Change password
 - [ ] Pages for users, classes, challenges set etc
 - [ ] Sandboxed Python server-side code execution
 - [ ] Server-side code testing and validation
@@ -21,6 +24,9 @@ An [A Level][alevel] Computer Science project where students complete coding tas
 - [x] EJS
 - [x] SQLite3
 - [ ] Socket.IO
+
+## Config
+Configuration is stored in `config.json`.
 
 ## Dependencies
 See `package.json`.

@@ -9,11 +9,13 @@
         <h1>Login</h1>
         <form method="POST" action="/login">
             <% if (message) { %>
-                <p><%= message %></p>
+                <p id="message"><%= message %></p>
             <% } %>
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <p><a href="/signup">Need to sign up?</a></p>
+            <p><a href="/forgot">Forgotten your password?</a></p>
+            <p><a href="/change">Want to change your password?</a></p>
             <input type="submit" value="Login">
         </form>
     </div>

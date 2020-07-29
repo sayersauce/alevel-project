@@ -3,12 +3,14 @@
  */
 
 const sqlite3 = require("sqlite3").verbose();
+const hashing = require("./hashing");
 
 let db = new sqlite3.Database("database.db");
 
 function init(){
     let userQuery = `CREATE TABLE IF NOT EXISTS Users (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        EMAIL VARCHAR(100) UNIQUE NOT NULL,
         USERNAME VARCHAR(100) UNIQUE NOT NULL,
         PASSWORD VARCHAR(100) NOT NULL,
         CLASS VARCHAR(100) NOT NULL,
@@ -39,12 +41,12 @@ function getUsers(callback) {
     });
 }
 
-function insertUser(username, hash, token, callback) {
+function insertUser(email, username, hash, token, callback) {
     // Check if user has provided a valid access token
     getClass(token, className => {
         if (className) {
             let datetime = new Date().toISOString();
-            db.run("INSERT INTO Users(USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?)", [username, hash, className, datetime, datetime]);
+            db.run("INSERT INTO Users(EMAIL, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?)", [email, username, hash, className, datetime, datetime]);
             callback(true);
         } else {
             callback(false);
@@ -71,6 +73,16 @@ function getUser(username, callback) {
     });
 }
 
+function getUserFromEmail(email, callback) {
+    // Returns a user from the Users table if they exist
+    db.get("SELECT * FROM Users WHERE EMAIL = ?", email, (err, row) => {
+        if (err) {
+            console.error(err);
+        }
+        callback(row);
+    });
+}
+
 function loginUser(username) {
     // Updates a user's login date if they exist
     db.run("UPDATE Users SET LOGINDATE = ? WHERE USERNAME = ?", [new Date().toISOString(), username], (err) => {
@@ -78,6 +90,29 @@ function loginUser(username) {
             console.error(err);
         }
     })
+}
+
+function updatePassword(username, hash) {
+    // Updates the hash of a user's password in the Users table
+    db.run("UPDATE Users SET PASSWORD = ? WHERE USERNAME = ?", [hash, username], (err) => {
+        if (err) {
+            console.error(err);
+        }
+    })
+}
+
+function createNewPassword(username) {
+    // Creates a new random password for a user that has forgotten their previous password
+    let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    let length = 10;
+    let password = "";
+
+    for (let i = 0; i < length; i++) {
+        password += chars[Math.floor(Math.random() * chars.length)]
+    }
+
+    updatePassword(username, hashing.hash(password));
+    return password;
 }
 
 
@@ -155,6 +190,6 @@ function deleteToken(token) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword};
 
 init();

@@ -55,3 +55,11 @@ input[type=submit]:hover {
     background-color: #5277e6;
     cursor: pointer;
 }
+
+#message {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid royalblue;
+    border-radius: 10px;
+    background-color: rgb(223, 231, 255);
+}
