@@ -26,26 +26,24 @@ app.set("view engine", "ejs");
 // Middleware
 
 app.use((req, res, next) => {
-    if (req.session.username) console.log("User logged in as " + req.session.username);
-    next();
+    // Only allow users which have logged in to access the site
+    if (req.originalUrl != "/login" && req.originalUrl != "/signup" && !req.session.username) {
+        // If users aren't on the login or signup page, send them back to the login page
+        res.redirect("/login");
+    } else {
+        next();
+    }
 });
 
 // Routing
 
 app.get("/", site.index);
-app.get("/login", login.login);
-app.get("/signup", login.signup);
-app.get("/users", (req, res) => {
-    db.getUsers((rows) => {
-        res.send(rows);
-    });
-});
 app.get("/code", site.code);
 
+app.use("/", login);
 app.use("/admin", admin);
 
-app.post("/login", login.loginSubmit);
-app.post("/signup", login.signupSubmit);
+// 404
 
 app.use((req, res) => {
     res.status(404);

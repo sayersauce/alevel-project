@@ -8,11 +8,15 @@
         <%- include ("../partials/nav") %>
         <h1>Administration</h1>
 
-        <form method="POST" action="/admin/createtoken">
-            <label for="className">Generate an Access Token for a Class.</label>
-            <input type="text" name="className" placeholder="Class Name" required>
-            <input type="submit" value="Generate Token">
-        </form>
+        <h3>Options</h3>
+        <ul>
+            <li>
+                <form method="POST" action="/admin/createtoken">
+                    <input type="text" name="className" placeholder="Class Name" required>
+                    <input type="submit" value="Generate an Access Token">
+                </form>
+            </li>
+        </ul>
 
         <table>
             <h3>Users</h3>

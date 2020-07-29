@@ -2,9 +2,10 @@
 An [A Level][alevel] Computer Science project where students complete coding tasks in [Python][python] set by their teachers. It is based in the browser. Users submit their code online. This code is then executed on the server and the output is sent back to the user.
 
 ## Project Requirements
-- [ ] Login system
-- [ ] Administrator accounts
-- [ ] Sign-Up system with access codes
+- [x] Login system
+- [x] Administrator accounts
+- [x] Sign-Up system with access codes
+- [ ] Reset password
 - [ ] Pages for users, classes, challenges set etc
 - [ ] Sandboxed Python server-side code execution
 - [ ] Server-side code testing and validation
@@ -18,7 +19,7 @@ An [A Level][alevel] Computer Science project where students complete coding tas
 ## Technologies Implemented
 - [x] Express.js
 - [x] EJS
-- [ ] SQLite3
+- [x] SQLite3
 - [ ] Socket.IO
 
 ## Dependencies

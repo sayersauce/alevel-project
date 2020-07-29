@@ -6,8 +6,13 @@ const db = require("../database");
 const router = require("express").Router();
 
 router.use((req, res, next) => {
-    // admin middleware here
-    next()
+    // Verify that the user is an admin
+    if (req.session.admin) {
+        next();
+    } else {
+        // If not redirect them to the homepage
+        res.redirect("/");
+    }
 });
 
 router.get("/", (req, res) => {
