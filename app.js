@@ -2,15 +2,18 @@
  * Computer Science Project
  */
 
+require("./configuration").init();
+
 const express = require("express");
+const app = express();
+const fs = require("fs");
 const session = require("express-session");
 const config = require("./config");
-const app = express();
-const port = config.app.port;
 
 const site = require("./routes/site");
 const login = require("./routes/login");
 const admin = require("./routes/admin");
+
 
 // Setup
 
@@ -55,4 +58,4 @@ app.use((req, res) => {
 
 // Startup
 
-app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
+app.listen(config.app.port, () => console.log(`App listening at http://localhost:${config.app.port}`));

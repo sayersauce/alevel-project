@@ -3,7 +3,6 @@ An [A Level][alevel] Computer Science project where students complete coding tas
 
 ## Project Requirements
 - [x] JSON configuration file
-- [ ] Automatic configuration file generation
 - [x] Login system
 - [x] Administrator accounts
 - [x] Sign-Up system with access codes
