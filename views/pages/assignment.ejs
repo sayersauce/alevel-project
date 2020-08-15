@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../partials/head") %>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+    <script defer src="/scripts/code.js"></script>
+    <script defer src="/scripts/assignment.js"></script>
+    <link rel="stylesheet" href="/stylesheets/assignments.css">
+</head>
+<body>
+    <div>
+        <div id="info">
+            <h1><%= assignment.NAME %></h1>
+            <p><%= assignment.DESC %></p>
+            <i>Hints: <%= assignment.HINTS %></i>
+            <p>Due on <%= new Date(assignment.DUEDATE).toLocaleString() %></p>
+        </div>
+        <div id="ide">
+            <% if (code) { %>
+                <div><%= code %></div>
+            <% } else { %>
+                <div><br></div>
+            <% } %>
+        </div>
+        <p id="console">
+            <% if (console) { %>
+                <%= console %>
+            <% } %>
+        </p>
+        <div id="buttons">
+            <form method="POST" action="/assignment/run">
+                <input type="hidden" name="code" class="code"><br>
+                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>"><br>
+                <input type="submit" value="Run Code">
+            </form>
+            <form method="POST" action="/assignment/submit">
+                <input type="hidden" name="code" class="code"><br>
+                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>"><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

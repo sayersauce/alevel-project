@@ -1,15 +1,14 @@
 /**
- * Homepage Route
+ * Homepage router
  */
 
 const db = require("../database");
+const router = require("express").Router();
 
-exports.index = function(req, res) {
+router.get("/", (req, res) => {
     db.getUserAssignments(req.session.userID, assignments => {
         res.render("pages/index", { username: req.session.username, assignments: assignments });
     });
-}
+});
 
-exports.code = function(req, res) {
-    res.render("pages/code");
-}
+module.exports = router;

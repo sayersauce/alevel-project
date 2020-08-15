@@ -1,0 +1,28 @@
+.assignment {
+    transition: background-color 200ms;
+    padding: 10px 20px;
+    background: #fafafa;
+}
+
+.assignment h4 {
+    margin-top: 5px;
+}
+
+.assignment:hover {
+    background: #f6f6f6;
+}
+
+#info {
+    text-align: center;
+}
+
+#buttons {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+input[type=submit] {
+    padding: 5px 10px;
+    margin-left: 5px;
+}

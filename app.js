@@ -13,6 +13,7 @@ const config = require("./config");
 const site = require("./routes/site");
 const login = require("./routes/login");
 const admin = require("./routes/admin");
+const assignment = require("./routes/assignment");
 
 
 // Setup
@@ -43,10 +44,9 @@ app.use((req, res, next) => {
 
 // Routing
 
-app.get("/", site.index);
-app.get("/code", site.code);
-
 app.use("/", login);
+app.use("/", site);
+app.use("/assignment", assignment);
 app.use("/admin", admin);
 
 // 404

@@ -10,11 +10,13 @@
         <% if (assignments.length) { %>
             <h3>Assignments</h3>
             <% for (let a of assignments) { %>
-                <div>
-                    <h4><%= a.NAME %></h4>
-                    <p><%= a.DESC %></p>
-                    <p>Due on <%= new Date(a.DUEDATE).toLocaleString() %></p>
-                </div>
+                <a href= "/assignment/<%= a.ID %>">
+                    <div class="assignment">
+                        <h4><%= a.NAME %></h4>
+                        <p><%= a.DESC %></p>
+                        <p>Due on <%= new Date(a.DUEDATE).toLocaleString() %></p>    
+                    </div>
+                </a>
             <% } %>
         <% } else { %>
             <p>You don't currently have any pending assignments 🧐</p>

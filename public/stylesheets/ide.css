@@ -5,6 +5,9 @@
     max-height: 500px;
     width: 1000px;
     height: 500px;
+}
+
+#ide, #console {
     font-family: monospace;
     text-align: left;
     outline: none;
@@ -13,6 +16,7 @@
     border: 1px solid #060606;
     counter-reset: linecount;
     overflow-y: scroll;
+    resize: vertical;
 }
 
 #ide div {
@@ -25,4 +29,13 @@
     min-width: 40px;
     content: counter(linecount);
     color: #bbb;
+}
+
+#console {
+    margin-top: 0;
+    border-top: 0;
+    min-height: 100px;
+    max-height: 500px;
+    max-width: 1000px;
+    height: 100px;
 }
