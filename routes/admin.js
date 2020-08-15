@@ -18,13 +18,25 @@ router.use((req, res, next) => {
 router.get("/", (req, res) => {
     db.getUsers(users => {
         db.getClasses(classes => {
-            res.render("pages/admin", { users: users, classes: classes });
+            db.getAssignments(assignments => {
+                res.render("pages/admin", { users: users, classes: classes, assignments: assignments });
+            });
         });
     });
 });
 
 router.post("/createtoken", (req, res) => {
     db.createToken(req.body.className);
+    res.redirect("/admin");
+});
+
+router.post("/createassignment", (req, res) => {
+    db.createAssignment(req.body.title, req.body.desc, req.body.hints, req.session.userID, req.body.startCode, req.body.testCode, new Date(req.body.date).toISOString());
+    res.redirect("/admin");
+});
+
+router.post("/assignuser", (req, res) => {
+    db.assignToUser(req.body.user, req.body.assignment);
     res.redirect("/admin");
 });
 
@@ -35,6 +47,11 @@ router.post("/deluser", (req, res) => {
 
 router.post("/deltoken", (req, res) => {
     db.deleteToken(req.body.token);
+    res.redirect("/admin");
+});
+
+router.post("/delassignment", (req, res) => {
+    db.deleteAssignment(req.body.id);
     res.redirect("/admin");
 });
 

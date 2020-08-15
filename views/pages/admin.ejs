@@ -2,22 +2,14 @@
 <html lang="en">
 <head>
     <%- include ("../partials/head") %>
+    <link rel="stylesheet" href="stylesheets/admin.css">
 </head>
 <body>
     <div class="content">
         <%- include ("../partials/nav") %>
         <h1>Administration</h1>
 
-        <h3>Options</h3>
-        <ul>
-            <li>
-                <form method="POST" action="/admin/createtoken">
-                    <input type="text" name="className" placeholder="Class Name" required>
-                    <input type="submit" value="Generate an Access Token">
-                </form>
-            </li>
-        </ul>
-
+        <h3>Tables</h3>
         <table>
             <h3>Users</h3>
             <tr>
@@ -27,7 +19,7 @@
                 <th>Class</th>
                 <th>Register Date</th>
                 <th>Last Login</th>
-                <th>Delete</th>
+                <th></th>
             </tr>
             <% for (let user of users) { %>
                 <tr>
@@ -52,7 +44,7 @@
             <tr>
                 <th>Token</th>
                 <th>Class Name</th>
-                <th>Delete</th>
+                <th></th>
             </tr>
             <% for (let c of classes) { %>
                 <tr>
@@ -67,6 +59,79 @@
                 </tr>
             <% } %>
         </table>
+
+        <table>
+            <h3>Assignments</h3>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Hints</th>
+                <th>Author ID</th>
+                <th>Start Code</th>
+                <th>Test Code</th>
+                <th>Creation Date</th>
+                <th>Due Date</th>
+                <th></th>
+            </tr>
+            <% for (let a of assignments) { %>
+                <tr>
+                    <td><%= a.NAME %></td>
+                    <td><%= a.DESC %></td>
+                    <td><%= a.HINTS %></td>
+                    <td><%= a.ASSIGNER %></td>
+                    <td><%= a.INITIALCODE %></td>
+                    <td><%= a.TESTCODE %></td>
+                    <td><%= new Date(a.CREATIONDATE).toLocaleString() %></td>
+                    <td><%= new Date(a.DUEDATE).toLocaleString() %></td>
+                    <td>
+                        <form method="POST" action="/admin/delassignment">
+                            <input type="hidden" name="id" value="<%= a.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <h3>Options</h3>
+        <div>
+            <form method="POST" action="/admin/createtoken">
+                <fieldset>
+                    <legend>Generate an Access Token</legend>
+                    <input type="text" name="className" placeholder="Class Name" required><br>
+                    <input type="submit" value="Generate an Access Token">
+                </fieldset>
+            </form>
+            <form method="POST" action="/admin/createassignment">
+                <fieldset>
+                    <legend>Create Assignment</legend>
+                    <input type="text" name="title" placeholder="Assignment Title" required><br>
+                    <textarea name="desc" placeholder="Assignment Description" required></textarea><br>
+                    <textarea name="hints" placeholder="Assignment Hints" required></textarea><br>
+                    <textarea name="startCode" placeholder="Starting Code" required></textarea><br>
+                    <textarea name="testCode" placeholder="Test Code (code to test against)" required></textarea><br>
+                    <label for="date">Due Date</label>
+                    <input type="date" name="date"><br>
+                    <input type="submit" value="Create Assignment">
+                </fieldset>
+            </form>
+            <form method="POST" action="/admin/assignuser">
+                <fieldset>
+                    <legend>Assign an Assignment to a User</legend>
+                    <select name="user">
+                        <% for (let user of users) { %>
+                            <option value="<%= user.ID %>"><%= user.USERNAME %></option>
+                        <% } %>
+                    </select><br>
+                    <select name="assignment">
+                        <% for (let assignment of assignments) { %>
+                            <option value="<%= assignment.ID %>"><%= assignment.NAME %></option>
+                        <% } %>
+                    </select><br>
+                    <input type="submit" value="Assign to User">
+                </fieldset>
+            </form>
+        </div>
     </div>
     <%- include ("../partials/footer") %>
 </body>

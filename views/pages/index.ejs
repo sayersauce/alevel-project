@@ -7,7 +7,18 @@
     <div class="content">
         <%- include ("../partials/nav") %>
         <h1>Hello <%= username %></h1>
-        <p>You don't currently have any pending challenges 🧐</p>
+        <% if (assignments.length) { %>
+            <h3>Assignments</h3>
+            <% for (let a of assignments) { %>
+                <div>
+                    <h4><%= a.NAME %></h4>
+                    <p><%= a.DESC %></p>
+                    <p>Due on <%= new Date(a.DUEDATE).toLocaleString() %></p>
+                </div>
+            <% } %>
+        <% } else { %>
+            <p>You don't currently have any pending assignments 🧐</p>
+        <% } %>
     </div>
     <%- include ("../partials/footer") %>
 </body>

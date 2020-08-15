@@ -34,6 +34,7 @@ router.post("/login", (req, res) => {
         if (user && hashing.check(req.body.password, user.PASSWORD)) {
             db.loginUser(req.body.username);
             req.session.username = user.USERNAME;
+            req.session.userID = user.ID;
             req.session.admin = user.CLASS == "admins";
             res.redirect("/");
         } else {

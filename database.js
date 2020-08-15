@@ -8,22 +8,50 @@ const hashing = require("./hashing");
 let db = new sqlite3.Database("database.db");
 
 function init(){
-    let userQuery = `CREATE TABLE IF NOT EXISTS Users (
-        ID INTEGER PRIMARY KEY AUTOINCREMENT,
-        EMAIL VARCHAR(100) UNIQUE NOT NULL,
-        USERNAME VARCHAR(100) UNIQUE NOT NULL,
-        PASSWORD VARCHAR(100) NOT NULL,
-        CLASS VARCHAR(100) NOT NULL,
-        REGISTERDATE DATETIME NOT NULL,
-        LOGINDATE DATETIME NOT NULL
-      );`;
-    let classQuery = `CREATE TABLE IF NOT EXISTS Classes (
-        TOKEN VARCHAR(6) NOT NULL UNIQUE,
-        NAME VARCHAR(100) NOT NULL
-      );`;
-      
-    db.run(userQuery);
-    db.run(classQuery);
+    // Create the tables in the database if they don't exist
+    db.run(`
+        CREATE TABLE IF NOT EXISTS Users (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            EMAIL VARCHAR(100) UNIQUE NOT NULL,
+            USERNAME VARCHAR(100) UNIQUE NOT NULL,
+            PASSWORD VARCHAR(100) NOT NULL,
+            CLASS VARCHAR(100) NOT NULL,
+            REGISTERDATE DATETIME NOT NULL,
+            LOGINDATE DATETIME NOT NULL
+        );
+    `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS Classes (
+            TOKEN VARCHAR(6) NOT NULL PRIMARY KEY,
+            NAME VARCHAR(100) NOT NULL
+        );
+    `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS Assignments (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NAME TEXT UNIQUE NOT NULL,
+            DESC TEXT NOT NULL,
+            HINTS TEXT NULL,
+            ASSIGNER INTEGER REFERENCES Users(ID),
+            INITIALCODE TEXT NOT NULL,
+            TESTCODE TEXT NOT NULL,
+            CREATIONDATE DATETIME NOT NULL,
+            DUEDATE DATETIME NOT NULL
+        );
+    `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS Submissions (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            USER INTEGER REFERENCES Users(ID),
+            ASSIGNMENT INTEGER REFERENCES Assignments(ID),
+            CODE TEXT NULL,
+            SUBMITTED BOOLEAN NOT NULL DEFAULT 0,
+            SUBMITDATE DATETIME NULL
+        );
+    `);
 }
 
 
@@ -154,7 +182,6 @@ function createToken(className) {
     });
 }
 
-
 function getClass(token, callback) {
     // Find the name of a class (group) based on its token and if it exists, pass it into a callback
     db.get("SELECT NAME name FROM Classes WHERE TOKEN = ?", token, (err, row) => {
@@ -181,7 +208,7 @@ function getClasses(callback) {
 }
 
 function deleteToken(token) {
-    // Delete's a token for a class in the Classes table
+    // Deletes a token for a class in the Classes table
     db.run("DELETE FROM Classes WHERE TOKEN=?", token, (err) => {
         if (err) {
             console.error(err);
@@ -190,6 +217,77 @@ function deleteToken(token) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword};
+// Assignments
+
+
+function createAssignment(title, desc, hints, assigner, initialCode, testCode, dueDate){
+    // Inserts values into the Assignments table and creates a record for user submission in the submissions table
+
+    let values = [title, desc, hints, assigner, initialCode, testCode, new Date().toISOString(), dueDate];
+
+    // Insert row in Assignments
+    db.run("INSERT INTO Assignments(NAME, DESC, HINTS, ASSIGNER, INITIALCODE, TESTCODE, CREATIONDATE, DUEDATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", values, function(err) {
+        if (err) {
+            if (err.errno == 19){
+                console.log("Error: An assignment with this title aleady exists");
+            } else {
+                console.log(err);
+            }
+            return;
+        }
+    });
+}
+
+function getAssignments(callback) {
+    // Retrieves all assignment rows from the Assignments table
+    db.all("SELECT * FROM Assignments", (err, rows) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        callback(rows);
+    });
+}
+
+function deleteAssignment(id) {
+    // Deletes an assignment from the Assignments table and Submissions for the assignment
+    db.run("DELETE FROM Assignments WHERE ID=?", id, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+    db.run("DELETE FROM Submissions WHERE ASSIGNMENT=?", id, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}
+
+
+// Assignment Submissions
+
+
+function assignToUser(userID, assignmentID) {
+    // Assigns an assignment to a user
+    db.run("INSERT INTO Submissions(USER, ASSIGNMENT) VALUES(?, ?)", [userID, assignmentID], (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}
+
+function getUserAssignments(id, callback) {
+    // Retrieves all assignments from the Assignments table for a user based on unsubmitted submissions in the Submissions table
+    db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITTED=0 AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        callback(rows);
+    });
+}
+
+
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments};
 
 init();

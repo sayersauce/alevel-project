@@ -18,6 +18,13 @@ An [A Level][alevel] Computer Science project where students complete coding tas
 - [ ] Linking to code submitted anonymously
 - [ ] Spreadsheet function for classes, users and scores with link to code
 
+## To Do
+- Fix multiple callbacks when retrieving data from database for admin page
+- Generally clean up code. Remove callback hell. Clean up indents etc
+- Add submissions table to admin page
+- Create `/assignment/assignment_id` routing with code editor and description etc
+- Better admin page css
+
 ## Technologies Implemented
 - [x] Express.js
 - [x] EJS

@@ -1,0 +1,18 @@
+input, textarea {
+    margin: 5px 0;
+}
+
+textarea {
+    min-width: 200px;
+    min-height: 100px;
+}
+
+form {
+    margin: 10px 0;
+}
+
+legend {
+    background: #111;
+    color: #fff;
+    padding: 5px;
+}
