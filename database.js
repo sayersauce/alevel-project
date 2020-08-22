@@ -287,7 +287,19 @@ function getUserAssignments(id, callback) {
     });
 }
 
+function getSubmissions(callback) {
+    // Retrieves all submissions rows from the Submissions table
+    db.all("SELECT * FROM Submissions", (err, rows) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        callback(rows);
+    });
+}
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments};
+
+
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions};
 
 init();

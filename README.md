@@ -21,9 +21,8 @@ An [A Level][alevel] Computer Science project where students complete coding tas
 ## To Do
 - Fix multiple callbacks when retrieving data from database for admin page
 - Generally clean up code. Remove callback hell. Clean up indents etc
-- Add submissions table to admin page
-- Create `/assignment/assignment_id` routing with code editor and description etc
 - Better admin page css
+- Fix code editor and assignments in general
 
 ## Technologies Implemented
 - [x] Express.js

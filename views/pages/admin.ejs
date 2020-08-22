@@ -63,6 +63,7 @@
         <table>
             <h3>Assignments</h3>
             <tr>
+                <th>ID</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Hints</th>
@@ -75,6 +76,7 @@
             </tr>
             <% for (let a of assignments) { %>
                 <tr>
+                    <td><%= a.ID %></td>
                     <td><%= a.NAME %></td>
                     <td><%= a.DESC %></td>
                     <td><%= a.HINTS %></td>
@@ -89,6 +91,28 @@
                             <input class="x" type="submit" value="x">
                         </form>
                     </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
+            <h3>Submissions</h3>
+            <tr>
+                <th>ID</th>
+                <th>Assignment</th>
+                <th>User</th>
+                <th>Code</th>
+                <th>Submitted</th>
+                <th>Submission Date</th>
+            </tr>
+            <% for (let s of submissions) { %>
+                <tr>
+                    <td><%= s.ID %></td>
+                    <td><%= s.ASSIGNMENT %></td>
+                    <td><%= s.USER %></td>
+                    <td><%= s.CODE || "-" %></td>
+                    <td><%= s.SUBMITTED ? "Yes" : "No" %></td>
+                    <td><%= s.SUBMITDATE || "-" %></td>
                 </tr>
             <% } %>
         </table>

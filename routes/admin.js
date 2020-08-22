@@ -19,7 +19,17 @@ router.get("/", (req, res) => {
     db.getUsers(users => {
         db.getClasses(classes => {
             db.getAssignments(assignments => {
-                res.render("pages/admin", { users: users, classes: classes, assignments: assignments });
+                db.getSubmissions(submissions => {
+                    for (let submission of submissions) {
+                        for (let assignment of assignments) {
+                            if (assignment.ID == submission.ASSIGNMENT) submission.ASSIGNMENT = assignment.NAME;
+                        }
+                        for (let user of users) {
+                            if (user.ID == submission.USER) submission.USER = user.USERNAME;
+                        }
+                    }
+                    res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions });
+                });
             });
         });
     });
