@@ -20,8 +20,13 @@ function runPythonCode(code, callback) {
 
     python.stdout.on("data", data => {
         output += data.toString();
-        console.log(data.toString())
+        console.log(data.toString());
     });
+
+    python.stderr.on("data", data => {
+        output += data.toString();
+        console.log(data.toString());
+    })
 
     python.on("close", () => {
         callback(output);
@@ -47,14 +52,28 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.post("/run", (req, res) => {
-    runPythonCode(req.body.code, output => {
-        res.render("pages/assignment", { assignment: JSON.parse(req.body.assignment), code: req.body.code, console: output });
+    const assignment = JSON.parse(req.body.assignment);
+    runPythonCode(req.body.code, userOutput => {
+        runPythonCode(assignment.TESTCODE, testCode => {
+            if (userOutput == testCode) {
+                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: "You have submitted the correct response, well done." });
+            } else {
+                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: userOutput });
+            }
+        });
     });
 });
 
 router.post("/submit", (req, res) => {
-    runPythonCode(req.body.code, output => {
-        res.render("pages/assignment", { assignment: JSON.parse(req.body.assignment), code: req.body.code, console: output });
+    const assignment = JSON.parse(req.body.assignment);
+    runPythonCode(req.body.code, userOutput => {
+        runPythonCode(assignment.TESTCODE, testCode => {
+            if (userOutput == testCode) {
+                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: "You have submitted the correct response, well done." });
+            } else {
+                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: userOutput });
+            }
+        });
     });
 });
 
