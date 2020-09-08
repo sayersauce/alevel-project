@@ -29,7 +29,7 @@ function runPythonCode(code, callback) {
     })
 
     python.on("close", () => {
-        callback(output);
+        callback(output.split("\n").join("<br />"));
     });
 }
 

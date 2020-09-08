@@ -23,7 +23,7 @@ function sendEmail(recipients, subject, text) {
     };
 
     transporter.sendMail(mail, (err, info) => {
-        if (err) console.err(err);
+        if (err) console.error(err);
     });
 }
 

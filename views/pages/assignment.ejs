@@ -9,7 +9,6 @@
             align-items: center;
         }
     </style>
-    <script defer src="/scripts/code.js"></script>
     <script defer src="/scripts/assignment.js"></script>
     <link rel="stylesheet" href="/stylesheets/assignments.css">
 </head>
@@ -21,16 +20,10 @@
             <i>Hints: <%= assignment.HINTS %></i>
             <p>Due on <%= new Date(assignment.DUEDATE).toLocaleString() %></p>
         </div>
-        <div id="ide">
-            <% if (code) { %>
-                <div><%= code %></div>
-            <% } else { %>
-                <div><br></div>
-            <% } %>
-        </div>
+        <textarea id="text" rows="30" cols="120"><%- code %></textarea>
         <p id="console">
             <% if (console) { %>
-                <%= console %>
+                <%- console %>
             <% } %>
         </p>
         <div id="buttons">
