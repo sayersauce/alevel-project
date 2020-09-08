@@ -139,6 +139,19 @@
                     <input type="submit" value="Create Assignment">
                 </fieldset>
             </form>
+            <form method="POST" action="/admin/createtest">
+                <fieldset>
+                    <legend>Create Testcase</legend>
+                    <select name="assignment">
+                        <% for (let a of assignments) { %>
+                            <option value="<%= a.ID %>"><%= a.NAME %></option>
+                        <% } %>
+                    </select><br>
+                    <textarea name="inputs" placeholder="Inputs" required></textarea><br>
+                    <textarea name="outputs" placeholder="Outputs" required></textarea><br>
+                    <input type="submit" value="Create Testcase">
+                </fieldset>
+            </form>
             <form method="POST" action="/admin/assignuser">
                 <fieldset>
                     <legend>Assign an Assignment to a User</legend>

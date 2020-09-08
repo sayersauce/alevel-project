@@ -52,6 +52,16 @@ function init(){
             SUBMITDATE DATETIME NULL
         );
     `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS Tests (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            ASSIGNMENT INTEGER REFERENCES Assignments(ID),
+            INPUTS TEXT NOT NULL,
+            OUTPUTS TEXT NOT NULL,
+            VISIBLE BOOLEAN NOT NULL
+        );
+    `);
 }
 
 

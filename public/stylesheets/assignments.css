@@ -26,3 +26,14 @@ input[type=submit] {
     padding: 5px 10px;
     margin-left: 5px;
 }
+
+#text {
+    font-family: monospace;
+    text-align: left;
+    outline: none;
+    background: #15171a;
+    color: #eee;
+    border: 1px solid #060606;
+    overflow-y: scroll;
+    resize: vertical;
+}
