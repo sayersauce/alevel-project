@@ -20,15 +20,23 @@ router.get("/", (req, res) => {
         db.getClasses(classes => {
             db.getAssignments(assignments => {
                 db.getSubmissions(submissions => {
-                    for (let submission of submissions) {
-                        for (let assignment of assignments) {
-                            if (assignment.ID == submission.ASSIGNMENT) submission.ASSIGNMENT = assignment.NAME;
+                    db.getTests(tests => {
+                        for (let submission of submissions) {
+                            for (let assignment of assignments) {
+                                if (assignment.ID == submission.ASSIGNMENT) submission.ASSIGNMENT = assignment.NAME;
+                            }
+                            for (let user of users) {
+                                if (user.ID == submission.USER) submission.USER = user.USERNAME;
+                            }
                         }
-                        for (let user of users) {
-                            if (user.ID == submission.USER) submission.USER = user.USERNAME;
+
+                        for (let test of tests) {
+                            for (let assignment of assignments) {
+                                if (test.ASSIGNMENT == assignment.ID) test.ASSIGNMENT = assignment.NAME;
+                            }
                         }
-                    }
-                    res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions });
+                        res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
+                    });
                 });
             });
         });
@@ -42,6 +50,11 @@ router.post("/createtoken", (req, res) => {
 
 router.post("/createassignment", (req, res) => {
     db.createAssignment(req.body.title, req.body.desc, req.body.hints, req.session.userID, req.body.startCode, req.body.testCode, new Date(req.body.date).toISOString());
+    res.redirect("/admin");
+});
+
+router.post("/createtest", (req, res) => {
+    db.createTest(req.body.assignment, req.body.inputs, req.body.outputs, req.body.visible);
     res.redirect("/admin");
 });
 
@@ -62,6 +75,11 @@ router.post("/deltoken", (req, res) => {
 
 router.post("/delassignment", (req, res) => {
     db.deleteAssignment(req.body.id);
+    res.redirect("/admin");
+});
+
+router.post("/deltest", (req, res) => {
+    db.deleteTest(req.body.id);
     res.redirect("/admin");
 });
 

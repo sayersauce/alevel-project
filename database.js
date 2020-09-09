@@ -236,7 +236,7 @@ function createAssignment(title, desc, hints, assigner, initialCode, testCode, d
     let values = [title, desc, hints, assigner, initialCode, testCode, new Date().toISOString(), dueDate];
 
     // Insert row in Assignments
-    db.run("INSERT INTO Assignments(NAME, DESC, HINTS, ASSIGNER, INITIALCODE, TESTCODE, CREATIONDATE, DUEDATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", values, function(err) {
+    db.run("INSERT INTO Assignments(NAME, DESC, HINTS, ASSIGNER, INITIALCODE, TESTCODE, CREATIONDATE, DUEDATE) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", values, (err) => {
         if (err) {
             if (err.errno == 19){
                 console.log("Error: An assignment with this title aleady exists");
@@ -309,7 +309,46 @@ function getSubmissions(callback) {
 }
 
 
+// Tests
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions};
+
+function getTests(callback) {
+    // Retrieves all test rows from the Tests table
+    db.all("SELECT * FROM Tests", (err, rows) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        callback(rows);
+    });
+}
+
+function createTest(assignmentID, inputs, outputs, visible){
+    // Inserts values into the Tests table
+    values = [assignmentID, inputs, outputs, visible];
+
+    db.run("INSERT INTO Tests(ASSIGNMENT, INPUTS, OUTPUTS, VISIBLE) VALUES(?, ?, ?, ?)", values, (err) => {
+        if (err) {
+            if (err.errno == 19){
+                console.log("Error: An assignment with this title aleady exists");
+            } else {
+                console.log(err);
+            }
+            return;
+        }
+    });
+}
+
+function deleteTest(id) {
+    // Deletes a test from the Tests table
+    db.run("DELETE FROM Tests WHERE ID=?", id, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}
+
+
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest};
 
 init();

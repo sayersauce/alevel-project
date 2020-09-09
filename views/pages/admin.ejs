@@ -96,6 +96,33 @@
         </table>
 
         <table>
+            <h3>Tests</h3>
+            <tr>
+                <th>ID</th>
+                <th>Assignment</th>
+                <th>Inputs</th>
+                <th>Outputs</th>
+                <th>Visible</th>
+                <th></th>
+            </tr>
+            <% for (let test of tests) { %>
+                <tr>
+                    <td><%= test.ID %></td>
+                    <td><%= test.ASSIGNMENT %></td>
+                    <td><%= test.INPUTS %></td>
+                    <td><%= test.OUTPUTS %></td>
+                    <td><%= test.VISIBLE ? "Yes" : "No" %></td>
+                    <td>
+                        <form method="POST" action="/admin/deltest">
+                            <input type="hidden" name="id" value="<%= test.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
             <h3>Submissions</h3>
             <tr>
                 <th>ID</th>
@@ -149,6 +176,8 @@
                     </select><br>
                     <textarea name="inputs" placeholder="Inputs" required></textarea><br>
                     <textarea name="outputs" placeholder="Outputs" required></textarea><br>
+                    <label for="visible">Visible Testcase</label>
+                    <input type="checkbox" name="visible"><br>
                     <input type="submit" value="Create Testcase">
                 </fieldset>
             </form>
