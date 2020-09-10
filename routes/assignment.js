@@ -6,17 +6,28 @@ const db = require("../database");
 const router = require("express").Router();
 const tmp = require("tmp");
 const fs = require("fs");
-const { spawn } = require("child_process");
+const { exec } = require("child_process");
 
 
-function runPythonCode(code, callback) {
-    console.log("Running with code:")
+function runPythonCode(code, inputs, callback) {
     console.log(code)
-    const tempFile = tmp.fileSync();
-    fs.writeFileSync(tempFile.name, code);
 
-    const python = spawn("python", [tempFile.name]);
+    const tempFile = tmp.fileSync();
+    const tempInputs = tmp.fileSync();
+
+    fs.writeFileSync(tempFile.name, code);
+    fs.writeFileSync(tempInputs.name, inputs);
+
+    const python = exec(`python ${tempFile.name} < ${tempInputs.name}`, function (error, stdout, stderr) {
+        console.log(stdout)
+    });
+
     let output = "";
+
+    python.stdin.on("data", data => {
+        output += data.toString();
+        console.log(data.toString());
+    });
 
     python.stdout.on("data", data => {
         output += data.toString();
@@ -53,26 +64,9 @@ router.get("/:id", (req, res, next) => {
 
 router.post("/run", (req, res) => {
     const assignment = JSON.parse(req.body.assignment);
-    runPythonCode(req.body.code, userOutput => {
-        runPythonCode(assignment.TESTCODE, testCode => {
-            if (userOutput == testCode) {
-                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: "You have submitted the correct response, well done." });
-            } else {
-                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: userOutput });
-            }
-        });
-    });
-});
-
-router.post("/submit", (req, res) => {
-    const assignment = JSON.parse(req.body.assignment);
-    runPythonCode(req.body.code, userOutput => {
-        runPythonCode(assignment.TESTCODE, testCode => {
-            if (userOutput == testCode) {
-                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: "You have submitted the correct response, well done." });
-            } else {
-                res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: userOutput });
-            }
+    db.getAssignmentTests(assignment.ASSIGNMENT, tests => {
+        runPythonCode(req.body.code, tests[0].INPUTS, userOutput => {
+            res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: userOutput });
         });
     });
 });

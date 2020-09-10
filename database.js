@@ -323,6 +323,17 @@ function getTests(callback) {
     });
 }
 
+function getAssignmentTests(id, callback) {
+    // Retrieves all test rows from the Tests table where Assignment id = id
+    db.all("SELECT * FROM Tests WHERE ASSIGNMENT = ?", id, (err, rows) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        callback(rows);
+    });
+}
+
 function createTest(assignmentID, inputs, outputs, visible){
     // Inserts values into the Tests table
     values = [assignmentID, inputs, outputs, visible];
@@ -349,6 +360,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests};
 
 init();

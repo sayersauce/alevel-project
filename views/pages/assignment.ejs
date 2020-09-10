@@ -15,9 +15,9 @@
 <body>
     <div>
         <div id="info">
-            <h1><%= assignment.NAME %></h1>
-            <p><%= assignment.DESC %></p>
-            <i>Hints: <%= assignment.HINTS %></i>
+            <h1><%- assignment.NAME %></h1>
+            <p><%- assignment.DESC %></p>
+            <i>Hints: <%- assignment.HINTS %></i>
             <p>Due on <%= new Date(assignment.DUEDATE).toLocaleString() %></p>
         </div>
         <textarea id="text" rows="30" cols="120"><%- code %></textarea>
@@ -31,11 +31,6 @@
                 <input type="hidden" name="code" class="code"><br>
                 <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>"><br>
                 <input type="submit" value="Run Code">
-            </form>
-            <form method="POST" action="/assignment/submit">
-                <input type="hidden" name="code" class="code"><br>
-                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>"><br>
-                <input type="submit" value="Submit">
             </form>
         </div>
     </div>

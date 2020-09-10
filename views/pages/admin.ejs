@@ -162,14 +162,14 @@
                     <textarea name="startCode" placeholder="Starting Code" required></textarea><br>
                     <textarea name="testCode" placeholder="Test Code (code to test against)" required></textarea><br>
                     <label for="date">Due Date</label>
-                    <input type="date" name="date"><br>
+                    <input type="date" name="date" required><br>
                     <input type="submit" value="Create Assignment">
                 </fieldset>
             </form>
             <form method="POST" action="/admin/createtest">
                 <fieldset>
                     <legend>Create Testcase</legend>
-                    <select name="assignment">
+                    <select name="assignment" required>
                         <% for (let a of assignments) { %>
                             <option value="<%= a.ID %>"><%= a.NAME %></option>
                         <% } %>
@@ -184,7 +184,7 @@
             <form method="POST" action="/admin/assignuser">
                 <fieldset>
                     <legend>Assign an Assignment to a User</legend>
-                    <select name="user">
+                    <select name="user" required>
                         <% for (let user of users) { %>
                             <option value="<%= user.ID %>"><%= user.USERNAME %></option>
                         <% } %>

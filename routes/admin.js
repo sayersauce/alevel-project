@@ -54,7 +54,7 @@ router.post("/createassignment", (req, res) => {
 });
 
 router.post("/createtest", (req, res) => {
-    db.createTest(req.body.assignment, req.body.inputs, req.body.outputs, req.body.visible);
+    db.createTest(req.body.assignment, req.body.inputs, req.body.outputs, !!req.body.visible);
     res.redirect("/admin");
 });
 
