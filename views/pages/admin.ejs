@@ -189,7 +189,7 @@
                             <option value="<%= user.ID %>"><%= user.USERNAME %></option>
                         <% } %>
                     </select><br>
-                    <select name="assignment">
+                    <select name="assignment" required>
                         <% for (let assignment of assignments) { %>
                             <option value="<%= assignment.ID %>"><%= assignment.NAME %></option>
                         <% } %>

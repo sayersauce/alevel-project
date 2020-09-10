@@ -8,11 +8,21 @@
             flex-direction: column;
             align-items: center;
         }
+
+        header {
+            margin: 0;
+        }
+
+        b {
+            color: white;
+            font-size: 1.5em;
+        }
     </style>
     <script defer src="/scripts/assignment.js"></script>
     <link rel="stylesheet" href="/stylesheets/assignments.css">
 </head>
 <body>
+    <%- include ("../partials/nav") %>
     <div>
         <div id="info">
             <h1><%- assignment.NAME %></h1>
@@ -23,7 +33,12 @@
         <textarea id="text" rows="30" cols="120"><%- code %></textarea>
         <p id="console">
             <% if (console) { %>
-                <%- console %>
+                <b><%= console.title %></b><br>
+                <span style="color: green;">Passed: <%= console.passed %></span>
+                <span style="color: red;">Failed: <%= console.failed %></span><br><br>
+                <% for (let line of console.lines) { %>
+                    <%= line %><br>
+                <% } %>
             <% } %>
         </p>
         <div id="buttons">

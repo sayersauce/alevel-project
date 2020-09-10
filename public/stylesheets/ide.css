@@ -37,5 +37,7 @@
     min-height: 100px;
     max-height: 500px;
     max-width: 1000px;
-    height: 100px;
+    height: 250px;
+    border: 1px solid #060606;
+    padding: 2px;
 }

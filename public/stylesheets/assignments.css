@@ -36,4 +36,5 @@ input[type=submit] {
     border: 1px solid #060606;
     overflow-y: scroll;
     resize: vertical;
+    height: 300px;
 }

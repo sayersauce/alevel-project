@@ -15,32 +15,29 @@ router.use((req, res, next) => {
     }
 });
 
-router.get("/", (req, res) => {
-    db.getUsers(users => {
-        db.getClasses(classes => {
-            db.getAssignments(assignments => {
-                db.getSubmissions(submissions => {
-                    db.getTests(tests => {
-                        for (let submission of submissions) {
-                            for (let assignment of assignments) {
-                                if (assignment.ID == submission.ASSIGNMENT) submission.ASSIGNMENT = assignment.NAME;
-                            }
-                            for (let user of users) {
-                                if (user.ID == submission.USER) submission.USER = user.USERNAME;
-                            }
-                        }
+router.get("/", async (req, res) => {
+    let users = await db.getUsers();
+    let classes = await db.getClasses();
+    let assignments = await db.getAssignments();
+    let submissions = await db.getSubmissions();
+    let tests = await db.getTests();
+    
+    for (let submission of submissions) {
+        for (let assignment of assignments) {
+            if (assignment.ID == submission.ASSIGNMENT) submission.ASSIGNMENT = assignment.NAME;
+        }
+        for (let user of users) {
+            if (user.ID == submission.USER) submission.USER = user.USERNAME;
+        }
+    }
 
-                        for (let test of tests) {
-                            for (let assignment of assignments) {
-                                if (test.ASSIGNMENT == assignment.ID) test.ASSIGNMENT = assignment.NAME;
-                            }
-                        }
-                        res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
-                    });
-                });
-            });
-        });
-    });
+    for (let test of tests) {
+        for (let assignment of assignments) {
+            if (test.ASSIGNMENT == assignment.ID) test.ASSIGNMENT = assignment.NAME;
+        }
+    }
+    res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
+
 });
 
 router.post("/createtoken", (req, res) => {

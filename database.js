@@ -68,26 +68,27 @@ function init(){
 // Users
 
 
-function getUsers(callback) {
+function getUsers() {
     // Retrieve all user rows from the Users table
-    db.all("SELECT * FROM Users", (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Users", (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
+    
 }
 
-function insertUser(email, username, hash, token, callback) {
+function insertUser(email, username, hash, token) {
     // Check if user has provided a valid access token
-    getClass(token, className => {
+    return new Promise(async (resolve, reject) => {
+        let className = await getClass(token);
         if (className) {
             let datetime = new Date().toISOString();
             db.run("INSERT INTO Users(EMAIL, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?)", [email, username, hash, className, datetime, datetime]);
-            callback(true);
+            resolve(true);
         } else {
-            callback(false);
+            resolve(false);
         }
     });
 }
@@ -101,41 +102,37 @@ function deleteUser(id) {
     });
 }
 
-function getUser(username, callback) {
-    // Returns a user from the Users table if they exist
-    db.get("SELECT * FROM Users WHERE USERNAME = ?", username, (err, row) => {
-        if (err) {
-            console.error(err);
-        }
-        callback(row);
+function getUser(username) {
+    // Returns a promise for a user from the Users table if they exist
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM Users WHERE USERNAME = ?", username, (err, row) => {
+            if (err) return reject(err);
+            resolve(row);
+        });
     });
 }
 
-function getUserFromEmail(email, callback) {
-    // Returns a user from the Users table if they exist
-    db.get("SELECT * FROM Users WHERE EMAIL = ?", email, (err, row) => {
-        if (err) {
-            console.error(err);
-        }
-        callback(row);
+function getUserFromEmail(email) {
+    // Returns promise with a user from the Users table if they exist
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM Users WHERE EMAIL = ?", email, (err, row) => {
+            if (err) return reject(err);
+            resolve(row);
+        });
     });
 }
 
 function loginUser(username) {
     // Updates a user's login date if they exist
     db.run("UPDATE Users SET LOGINDATE = ? WHERE USERNAME = ?", [new Date().toISOString(), username], (err) => {
-        if (err) {
-            console.error(err);
-        }
+        if (err) console.error(err);
     })
 }
 
 function updatePassword(username, hash) {
     // Updates the hash of a user's password in the Users table
     db.run("UPDATE Users SET PASSWORD = ? WHERE USERNAME = ?", [hash, username], (err) => {
-        if (err) {
-            console.error(err);
-        }
+        if (err) console.error(err);
     })
 }
 
@@ -192,29 +189,29 @@ function createToken(className) {
     });
 }
 
-function getClass(token, callback) {
-    // Find the name of a class (group) based on its token and if it exists, pass it into a callback
-    db.get("SELECT NAME name FROM Classes WHERE TOKEN = ?", token, (err, row) => {
-        if (err) {
-            console.error(err);
-        }
-        if (row && row.name) {
-            callback(row.name);
-        } else {
-            callback();
-        }
+function getClass(token) {
+    // Find the name of a class (group) based on its token. Returns a promise
+    return new Promise((resolve, reject) => {
+        db.get("SELECT NAME name FROM Classes WHERE TOKEN = ?", token, (err, row) => {
+            if (err) return reject(err);
+            if (row && row.name) {
+                resolve(row.name);
+            } else {
+                resolve();
+            }
+        });
     });
 }
 
-function getClasses(callback) {
+function getClasses() {
     // Retrieve all class rows from the Classes table
-    db.all("SELECT * FROM Classes", (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Classes", (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
+    
 }
 
 function deleteToken(token) {
@@ -248,28 +245,23 @@ function createAssignment(title, desc, hints, assigner, initialCode, testCode, d
     });
 }
 
-function getAssignments(callback) {
+function getAssignments() {
     // Retrieves all assignment rows from the Assignments table
-    db.all("SELECT * FROM Assignments", (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Assignments", (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
 }
 
 function deleteAssignment(id) {
     // Deletes an assignment from the Assignments table and Submissions for the assignment
     db.run("DELETE FROM Assignments WHERE ID=?", id, (err) => {
-        if (err) {
-            console.error(err);
-        }
+        if (err) console.error(err);
     });
     db.run("DELETE FROM Submissions WHERE ASSIGNMENT=?", id, (err) => {
-        if (err) {
-            console.error(err);
-        }
+        if (err) console.error(err);
     });
 }
 
@@ -280,31 +272,27 @@ function deleteAssignment(id) {
 function assignToUser(userID, assignmentID) {
     // Assigns an assignment to a user
     db.run("INSERT INTO Submissions(USER, ASSIGNMENT) VALUES(?, ?)", [userID, assignmentID], (err) => {
-        if (err) {
-            console.error(err);
-        }
+        if (err) console.error(err);
     });
 }
 
-function getUserAssignments(id, callback) {
+function getUserAssignments(id) {
     // Retrieves all assignments from the Assignments table for a user based on unsubmitted submissions in the Submissions table
-    db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITTED=0 AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITTED=0 AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
 }
 
-function getSubmissions(callback) {
+function getSubmissions() {
     // Retrieves all submissions rows from the Submissions table
-    db.all("SELECT * FROM Submissions", (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Submissions", (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
 }
 
@@ -312,25 +300,23 @@ function getSubmissions(callback) {
 // Tests
 
 
-function getTests(callback) {
+function getTests() {
     // Retrieves all test rows from the Tests table
-    db.all("SELECT * FROM Tests", (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Tests", (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
 }
 
-function getAssignmentTests(id, callback) {
+function getAssignmentTests(id) {
     // Retrieves all test rows from the Tests table where Assignment id = id
-    db.all("SELECT * FROM Tests WHERE ASSIGNMENT = ?", id, (err, rows) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        callback(rows);
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Tests WHERE ASSIGNMENT = ?", id, (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
     });
 }
 
