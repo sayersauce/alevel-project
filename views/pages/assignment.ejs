@@ -25,7 +25,7 @@
     <%- include ("../partials/nav") %>
     <div>
         <div id="info">
-            <h1><%- assignment.NAME %></h1>
+            <h1 id="assignment-title"><%- assignment.NAME %></h1>
             <p><%- assignment.DESC %></p>
             <i>Hints: <%- assignment.HINTS %></i>
             <p>Due on <%= new Date(assignment.DUEDATE).toLocaleString() %></p>

@@ -296,6 +296,12 @@ function getSubmissions() {
     });
 }
 
+function updateSubmission(code, id) {
+    db.run("UPDATE Submissions SET CODE = ?, SUBMITTED = 1, SUBMITDATE = ?  WHERE ID = ?", [code, new Date().toISOString(), id], (err) => {
+        if (err) console.error(err);
+    })
+}
+
 
 // Tests
 
@@ -346,6 +352,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission};
 
 init();

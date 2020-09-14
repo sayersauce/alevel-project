@@ -13,6 +13,10 @@
 }
 
 #info {
+    text-align: justify;
+}
+
+#assignment-title {
     text-align: center;
 }
 
