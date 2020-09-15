@@ -21,24 +21,17 @@ router.get("/", async (req, res) => {
     let assignments = await db.getAssignments();
     let submissions = await db.getSubmissions();
     let tests = await db.getTests();
-    
-    for (let submission of submissions) {
-        for (let assignment of assignments) {
-            if (assignment.ID == submission.ASSIGNMENT) submission.ASSIGNMENT = assignment.NAME;
-        }
-        for (let user of users) {
-            if (user.ID == submission.USER) submission.USER = user.USERNAME;
-        }
-    }
 
-    for (let test of tests) {
-        for (let assignment of assignments) {
-            if (test.ASSIGNMENT == assignment.ID) test.ASSIGNMENT = assignment.NAME;
-        }
-    }
     res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
 
 });
+
+router.get("/assignments", async (req, res) => {
+    let users = await db.getUsers();
+    let assignments = await db.getAssignments();
+
+    res.render("pages/admin/assignments", { users: users, assignments: assignments });
+})
 
 router.post("/createtoken", (req, res) => {
     db.createToken(req.body.className);

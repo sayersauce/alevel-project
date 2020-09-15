@@ -16,3 +16,20 @@ legend {
     color: #fff;
     padding: 5px;
 }
+
+.assignment {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 10px;
+    background: #eee;
+    transition: background-color 200ms;
+}
+
+.assignment:hover {
+    background: #dfdfdf;
+}
+
+.assignment * {
+    margin-right: 10px;
+}

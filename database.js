@@ -289,7 +289,7 @@ function getUserAssignments(id) {
 function getSubmissions() {
     // Retrieves all submissions rows from the Submissions table
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM Submissions", (err, rows) => {
+        db.all("SELECT * FROM Submissions INNER JOIN Assignments ON Submissions.ASSIGNMENT = Assignments.ID INNER JOIN Users ON Submissions.USER = Users.ID", (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });
@@ -309,7 +309,7 @@ function updateSubmission(code, id) {
 function getTests() {
     // Retrieves all test rows from the Tests table
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM Tests", (err, rows) => {
+        db.all("SELECT * FROM Tests INNER JOIN Assignments ON Tests.ASSIGNMENT = Assignments.ID", (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });

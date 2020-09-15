@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+</head>
+<body>
+    <div class="content">
+        <%- include ("../../partials/nav") %>
+        <h1>Assignments</h1>
+        
+        <% for (let a of assignments) { %>
+            <a href="/admin/assignment/<%= a.ID %>" class="assignment">
+                <h4><%= a.NAME %></h4>
+                <p>Due on <%= new Date(a.DUEDATE).toLocaleString() %></p>
+            </a>
+        <% } %>
+
+        <form method="POST" action="/admin/createassignment">
+            <fieldset>
+                <legend>Create Assignment</legend>
+                <input type="text" name="title" placeholder="Assignment Title" required><br>
+                <textarea name="desc" placeholder="Assignment Description" required></textarea><br>
+                <textarea name="hints" placeholder="Assignment Hints" required></textarea><br>
+                <textarea name="startCode" placeholder="Starting Code" required></textarea><br>
+                <textarea name="testCode" placeholder="Test Code (code to test against)" required></textarea><br>
+                <label for="date">Due Date</label>
+                <input type="date" name="date" required><br>
+                <input type="submit" value="Create Assignment">
+            </fieldset>
+        </form>
+
+        <form method="POST" action="/admin/createtest">
+            <fieldset>
+                <legend>Create Testcase</legend>
+                <select name="assignment" required>
+                    <% for (let a of assignments) { %>
+                        <option value="<%= a.ID %>"><%= a.NAME %></option>
+                    <% } %>
+                </select><br>
+                <textarea name="inputs" placeholder="Inputs" required></textarea><br>
+                <textarea name="outputs" placeholder="Outputs" required></textarea><br>
+                <label for="visible">Visible Testcase</label>
+                <input type="checkbox" name="visible"><br>
+                <input type="submit" value="Create Testcase">
+            </fieldset>
+        </form>
+
+        <form method="POST" action="/admin/assignuser">
+            <fieldset>
+                <legend>Assign an Assignment to a User</legend>
+                <select name="user" required>
+                    <% for (let user of users) { %>
+                        <option value="<%= user.ID %>"><%= user.USERNAME %></option>
+                    <% } %>
+                </select><br>
+                <select name="assignment" required>
+                    <% for (let assignment of assignments) { %>
+                        <option value="<%= assignment.ID %>"><%= assignment.NAME %></option>
+                    <% } %>
+                </select><br>
+                <input type="submit" value="Assign to User">
+            </fieldset>
+        </form>
+
+    </div>
+    <%- include ("../../partials/footer") %>
+</body>
+</html>
+ 

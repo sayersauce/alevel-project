@@ -108,7 +108,7 @@
             <% for (let test of tests) { %>
                 <tr>
                     <td><%= test.ID %></td>
-                    <td><%= test.ASSIGNMENT %></td>
+                    <td><%= test.NAME %></td>
                     <td><%= test.INPUTS %></td>
                     <td><%= test.OUTPUTS %></td>
                     <td><%= test.VISIBLE ? "Yes" : "No" %></td>
@@ -135,8 +135,8 @@
             <% for (let s of submissions) { %>
                 <tr>
                     <td><%= s.ID %></td>
-                    <td><%= s.ASSIGNMENT %></td>
-                    <td><%= s.USER %></td>
+                    <td><%= s.NAME %></td>
+                    <td><%= s.USERNAME %></td>
                     <td><%= s.CODE || "-" %></td>
                     <td><%= s.SUBMITTED ? "Yes" : "No" %></td>
                     <td><%= s.SUBMITDATE || "-" %></td>
