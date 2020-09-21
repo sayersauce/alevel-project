@@ -31,6 +31,12 @@ router.get("/assignments", async (req, res) => {
     let assignments = await db.getAssignments();
 
     res.render("pages/admin/assignments", { users: users, assignments: assignments });
+});
+
+router.get("/assignment/:id", async (req, res) => {
+    let assignment = await db.getAssignment(req.params.id);
+
+    res.render("pages/admin/assignment", { assignment: assignment });
 })
 
 router.post("/createtoken", (req, res) => {

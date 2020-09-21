@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+</head>
+<body>
+    <div class="content">
+        <%- include ("../../partials/nav") %>
+        <h1><%- assignment.NAME %></h1>
+        <p><%- assignment.DESC %></p>
+        <p>Due on: <%- new Date(assignment.DUEDATE).toLocaleString() %></p>
+        <i>Hints: <%- assignment.HINTS %></i>
+
+        <h2>Users</h2>
+        <p>Users go here...</p>
+    </div>
+    <%- include ("../../partials/footer") %>
+</body>
+</html>
+ 

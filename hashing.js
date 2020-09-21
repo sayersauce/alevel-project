@@ -1,9 +1,3 @@
-/**
- * Hashing function and checker for passwords
- * I intend to rewrite this without a library
- * and replicate the algorithm myself.
- */
-
 const bcrypt = require("bcrypt");
 
 function hash(pass) {

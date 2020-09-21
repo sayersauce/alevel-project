@@ -245,6 +245,16 @@ function createAssignment(title, desc, hints, assigner, initialCode, testCode, d
     });
 }
 
+function getAssignment(id) {
+    // Returns a promise for an assignment from the Assignments table if they exist
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM Assignments WHERE ID = ?", id, (err, row) => {
+            if (err) return reject(err);
+            resolve(row);
+        });
+    });
+}
+
 function getAssignments() {
     // Retrieves all assignment rows from the Assignments table
     return new Promise((resolve, reject) => {
@@ -352,6 +362,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment};
 
 init();
