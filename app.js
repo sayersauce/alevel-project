@@ -57,4 +57,4 @@ app.use((req, res) => {
 
 // Startup
 
-app.listen(config.app.port, () => console.log(`App listening at http://localhost:${config.app.port}`));
+app.listen(80, () => console.log(`App listening at http://localhost:${config.app.port}`));

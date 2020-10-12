@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+</head>
+<body>
+    <div class="content">
+        <%- include ("../../partials/nav") %>
+        <h1>Tables</h1>
+        <table>
+            <h3>Users</h3>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Class</th>
+                <th>Register Date</th>
+                <th>Last Login</th>
+                <th></th>
+            </tr>
+            <% for (let user of users) { %>
+                <tr>
+                    <td><%= user.ID %></td>
+                    <td><%= user.USERNAME %></td>
+                    <td><%= user.EMAIL %></td>
+                    <td><%= user.CLASS %></td>
+                    <td><%= new Date(user.REGISTERDATE).toLocaleString() %></td>
+                    <td><%= new Date(user.LOGINDATE).toLocaleString() %></td>
+                    <td>
+                        <form method="POST" action="/admin/deluser">
+                            <input type="hidden" name="id" value="<%= user.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
+            <h3>Classes</h3>
+            <tr>
+                <th>Token</th>
+                <th>Class Name</th>
+                <th></th>
+            </tr>
+            <% for (let c of classes) { %>
+                <tr>
+                    <td><%= c.TOKEN %></td>
+                    <td><%= c.NAME %></td>
+                    <td>
+                        <form method="POST" action="/admin/deltoken">
+                            <input type="hidden" name="token" value="<%= c.TOKEN %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
+            <h3>Assignments</h3>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Hints</th>
+                <th>Author ID</th>
+                <th>Start Code</th>
+                <th>Test Code</th>
+                <th>Creation Date</th>
+                <th>Due Date</th>
+                <th></th>
+            </tr>
+            <% for (let a of assignments) { %>
+                <tr>
+                    <td><%= a.ID %></td>
+                    <td><%= a.NAME %></td>
+                    <td><%= a.DESC %></td>
+                    <td><%= a.HINTS %></td>
+                    <td><%= a.ASSIGNER %></td>
+                    <td><%= a.INITIALCODE %></td>
+                    <td><%= a.TESTCODE %></td>
+                    <td><%= new Date(a.CREATIONDATE).toLocaleString() %></td>
+                    <td><%= new Date(a.DUEDATE).toLocaleString() %></td>
+                    <td>
+                        <form method="POST" action="/admin/delassignment">
+                            <input type="hidden" name="id" value="<%= a.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
+            <h3>Tests</h3>
+            <tr>
+                <th>ID</th>
+                <th>Assignment</th>
+                <th>Inputs</th>
+                <th>Outputs</th>
+                <th>Visible</th>
+                <th></th>
+            </tr>
+            <% for (let test of tests) { %>
+                <tr>
+                    <td><%= test.ID %></td>
+                    <td><%= test.NAME %></td>
+                    <td><%= test.INPUTS %></td>
+                    <td><%= test.OUTPUTS %></td>
+                    <td><%= test.VISIBLE ? "Yes" : "No" %></td>
+                    <td>
+                        <form method="POST" action="/admin/deltest">
+                            <input type="hidden" name="id" value="<%= test.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
+            <h3>Submissions</h3>
+            <tr>
+                <th>ID</th>
+                <th>Assignment</th>
+                <th>User</th>
+                <th>Code</th>
+                <th>Submitted</th>
+                <th>Submission Date</th>
+            </tr>
+            <% for (let s of submissions) { %>
+                <tr>
+                    <td><%= s.ID %></td>
+                    <td><%= s.NAME %></td>
+                    <td><%= s.USERNAME %></td>
+                    <td><%= s.CODE || "-" %></td>
+                    <td><%= s.SUBMITTED ? "Yes" : "No" %></td>
+                    <td><%= s.SUBMITDATE || "-" %></td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+    <%- include ("../../partials/footer") %>
+</body>
+</html>
+ 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include ("../../partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+</head>
+<body>
+    <div class="content">
+        <%- include ("../../partials/nav") %>
+        <h1>Classes</h1>
+        
+        <div>
+            <form method="POST" action="/admin/createtoken">
+                <fieldset>
+                    <legend>Generate an Access Token</legend>
+                    <input type="text" name="className" placeholder="Class Name" required><br>
+                    <input type="submit" value="Generate an Access Token">
+                </fieldset>
+            </form>
+        </div>
+
+        <h2>Class Groups</h2>
+
+        <% for (let c in classObj) { %>
+            <h3><%= c %></h3>
+            <ul>
+                <% for (let user of classObj[c]) { %><li><%= user %></li><% } %>
+            </ul>
+        <% } %>
+
+        <table>
+            <h2>Class Tokens</h2>
+            <tr>
+                <th>Token</th>
+                <th>Class Name</th>
+                <th></th>
+            </tr>
+            <% for (let c of classes) { %>
+                <tr>
+                    <td><%= c.TOKEN %></td>
+                    <td><%= c.NAME %></td>
+                    <td>
+                        <form method="POST" action="/admin/deltoken">
+                            <input type="hidden" name="token" value="<%= c.TOKEN %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+    </div>
+    <%- include ("../../partials/footer") %>
+</body>
+</html>
+ 

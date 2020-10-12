@@ -312,6 +312,15 @@ function updateSubmission(code, id) {
     })
 }
 
+function getSubmissionsForAssignment(id) {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Assignments INNER JOIN Submissions ON Submissions.ASSIGNMENT = ? INNER JOIN Users ON Submissions.USER = Users.ID WHERE Assignments.ID = ?", [id, id], (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
 
 // Tests
 
@@ -362,6 +371,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment};
 
 init();

@@ -16,14 +16,40 @@ router.use((req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
+    res.render("pages/admin");
+});
+
+router.get("/assignments", async (req, res) => {
+    let users = await db.getUsers();
+    let assignments = await db.getAssignments();
+
+    res.render("pages/admin/assignments", { users: users, assignments: assignments });
+});
+
+router.get("/tables", async (req, res) => {
     let users = await db.getUsers();
     let classes = await db.getClasses();
     let assignments = await db.getAssignments();
     let submissions = await db.getSubmissions();
     let tests = await db.getTests();
 
-    res.render("pages/admin", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
+    res.render("pages/admin/tables", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
+});
 
+router.get("/classes", async (req, res) => {
+    let users = await db.getUsers();
+    let classes = await db.getClasses();
+    let dict = {};
+
+    for (let c of classes) {
+        dict[c.NAME] = [];
+    }
+
+    for (let u of users) {
+        dict[u.CLASS].push(u.USERNAME);
+    }
+
+    res.render("pages/admin/classes", { classes: classes, classObj: dict });
 });
 
 router.get("/assignments", async (req, res) => {
@@ -35,8 +61,9 @@ router.get("/assignments", async (req, res) => {
 
 router.get("/assignment/:id", async (req, res) => {
     let assignment = await db.getAssignment(req.params.id);
+    let submissions = await db.getSubmissionsForAssignment(req.params.id);
 
-    res.render("pages/admin/assignment", { assignment: assignment });
+    res.render("pages/admin/assignment", { assignment: assignment, submissions: submissions });
 })
 
 router.post("/createtoken", (req, res) => {

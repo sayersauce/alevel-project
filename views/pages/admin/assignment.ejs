@@ -12,8 +12,14 @@
         <p>Due on: <%- new Date(assignment.DUEDATE).toLocaleString() %></p>
         <i>Hints: <%- assignment.HINTS %></i>
 
-        <h2>Users</h2>
-        <p>Users go here...</p>
+        <h2>Submissions</h2>
+        <% for (let sub of submissions) { %>
+            <div>
+                <h3><%- sub.USERNAME %></h3>
+                <p><%- sub.CODE %></p>
+                <p><%- sub.SUBMITDATE ? new Date(sub.SUBMITDATE).toLocaleString() : "Not submitted." %></p>
+            </div>
+        <% } %>
     </div>
     <%- include ("../../partials/footer") %>
 </body>
