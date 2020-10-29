@@ -34,6 +34,7 @@ router.post("/login", async (req, res) => {
     if (user && hashing.check(req.body.password, user.PASSWORD)) {
         db.loginUser(req.body.username);
         req.session.username = user.USERNAME;
+        req.session.firstname = user.FIRSTNAME;
         req.session.userID = user.ID;
         req.session.admin = user.CLASS == "admins";
         res.redirect("/");
@@ -44,7 +45,7 @@ router.post("/login", async (req, res) => {
 
 router.post("/signup", async (req, res) => {
     // Attempt to sign the user up
-    let success = await db.insertUser(req.body.email, req.body.username, hashing.hash(req.body.password), req.body.token);
+    let success = await db.insertUser(req.body.email, req.body.firstname, req.body.lastname, hashing.hash(req.body.password), req.body.token);
     if (success) { 
         res.render("pages/login", { message: "You have successfully signed up. Please log in." });
     } else {
@@ -54,7 +55,7 @@ router.post("/signup", async (req, res) => {
 
 router.post("/forgot", async (req, res) => {
     // Attempt to send an email to the user who has forgotten their password
-    let user = await db.getUserFromEmail(req.body.email);
+    let user = await db.getUser(req.body.email);
     if (user) {
         let password = db.createNewPassword(user.USERNAME);
         email.sendEmail(user.EMAIL, "New Password", `Hello ${user.USERNAME} your new password is ${password}.`)

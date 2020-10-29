@@ -9,11 +9,14 @@ let db = new sqlite3.Database("database.db");
 
 function init(){
     // Create the tables in the database if they don't exist
+
+    // USERNAME in Users table is their Email
     db.run(`
         CREATE TABLE IF NOT EXISTS Users (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
-            EMAIL VARCHAR(100) UNIQUE NOT NULL,
             USERNAME VARCHAR(100) UNIQUE NOT NULL,
+            FIRSTNAME VARCHAR(100) NOT NULL,
+            LASTNAME VARCHAR(100) NOT NULL,
             PASSWORD VARCHAR(100) NOT NULL,
             CLASS VARCHAR(100) NOT NULL,
             REGISTERDATE DATETIME NOT NULL,
@@ -48,7 +51,7 @@ function init(){
             USER INTEGER REFERENCES Users(ID),
             ASSIGNMENT INTEGER REFERENCES Assignments(ID),
             CODE TEXT NULL,
-            SUBMITTED BOOLEAN NOT NULL DEFAULT 0,
+            MARK TEXT NULL,
             SUBMITDATE DATETIME NULL
         );
     `);
@@ -62,6 +65,8 @@ function init(){
             VISIBLE BOOLEAN NOT NULL
         );
     `);
+
+    //db.run(`INSERT INTO Classes(TOKEN, NAME) VALUES("admins", "admins")`);
 }
 
 
@@ -79,13 +84,13 @@ function getUsers() {
     
 }
 
-function insertUser(email, username, hash, token) {
+function insertUser(username, firstname, lastname, hash, token) {
     // Check if user has provided a valid access token
     return new Promise(async (resolve, reject) => {
         let className = await getClass(token);
         if (className) {
             let datetime = new Date().toISOString();
-            db.run("INSERT INTO Users(EMAIL, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?)", [email, username, hash, className, datetime, datetime]);
+            db.run("INSERT INTO Users(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?, ?)", [firstname, lastname, username, hash, className, datetime, datetime]);
             resolve(true);
         } else {
             resolve(false);
@@ -106,16 +111,6 @@ function getUser(username) {
     // Returns a promise for a user from the Users table if they exist
     return new Promise((resolve, reject) => {
         db.get("SELECT * FROM Users WHERE USERNAME = ?", username, (err, row) => {
-            if (err) return reject(err);
-            resolve(row);
-        });
-    });
-}
-
-function getUserFromEmail(email) {
-    // Returns promise with a user from the Users table if they exist
-    return new Promise((resolve, reject) => {
-        db.get("SELECT * FROM Users WHERE EMAIL = ?", email, (err, row) => {
             if (err) return reject(err);
             resolve(row);
         });
@@ -286,11 +281,23 @@ function assignToUser(userID, assignmentID) {
     });
 }
 
+function getUserAssignment(user, assignment) {
+    // Retrieves a single assignment from the Assignments table for a user based on an submission in the Submissions table
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM Submissions INNER JOIN Assignments WHERE Submissions.ID=? AND Assignments.ID = Submissions.ASSIGNMENT AND Submissions.USER=?", [assignment, user], (err, rows) => {
+            if (err) return reject(err);
+            console.log(rows)
+            resolve(rows);
+        });
+    });
+}
+
 function getUserAssignments(id) {
     // Retrieves all assignments from the Assignments table for a user based on unsubmitted submissions in the Submissions table
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITTED=0 AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
+        db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITDATE IS NULL AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
             if (err) return reject(err);
+            console.log(rows)
             resolve(rows);
         });
     });
@@ -306,10 +313,19 @@ function getSubmissions() {
     });
 }
 
-function updateSubmission(code, id) {
-    db.run("UPDATE Submissions SET CODE = ?, SUBMITTED = 1, SUBMITDATE = ?  WHERE ID = ?", [code, new Date().toISOString(), id], (err) => {
+function updateSubmission(code, mark, id) {
+    db.run("UPDATE Submissions SET CODE = ?, MARK = ?, SUBMITDATE = ?  WHERE ID = ?", [code, mark, new Date().toISOString(), id], (err) => {
         if (err) console.error(err);
     })
+}
+
+function getSubmissionsForAssignment(id) {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Assignments INNER JOIN Submissions ON Submissions.ASSIGNMENT = ? INNER JOIN Users ON Submissions.USER = Users.ID WHERE Assignments.ID = ?", [id, id], (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
 }
 
 function getSubmissionsForAssignment(id) {
@@ -371,6 +387,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, getUserFromEmail, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignment, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment};
 
 init();

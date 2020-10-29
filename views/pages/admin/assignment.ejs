@@ -15,8 +15,8 @@
         <h2>Submissions</h2>
         <% for (let sub of submissions) { %>
             <div>
-                <h3><%- sub.USERNAME %></h3>
-                <p><%- sub.CODE %></p>
+                <h3><%- sub.FIRSTNAME + " " + sub.LASTNAME %></h3>
+                <p><%- sub.MARK %></p>
                 <p><%- sub.SUBMITDATE ? new Date(sub.SUBMITDATE).toLocaleString() : "Not submitted." %></p>
             </div>
         <% } %>

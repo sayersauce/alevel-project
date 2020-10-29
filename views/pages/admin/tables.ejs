@@ -12,8 +12,9 @@
             <h3>Users</h3>
             <tr>
                 <th>ID</th>
+                <th>Firstname</th>
+                <th>Surname</th>
                 <th>Username</th>
-                <th>Email</th>
                 <th>Class</th>
                 <th>Register Date</th>
                 <th>Last Login</th>
@@ -22,8 +23,9 @@
             <% for (let user of users) { %>
                 <tr>
                     <td><%= user.ID %></td>
+                    <td><%= user.FIRSTNAME %></td>
+                    <td><%= user.LASTNAME %></td>
                     <td><%= user.USERNAME %></td>
-                    <td><%= user.EMAIL %></td>
                     <td><%= user.CLASS %></td>
                     <td><%= new Date(user.REGISTERDATE).toLocaleString() %></td>
                     <td><%= new Date(user.LOGINDATE).toLocaleString() %></td>
@@ -127,16 +129,16 @@
                 <th>Assignment</th>
                 <th>User</th>
                 <th>Code</th>
-                <th>Submitted</th>
+                <th>Mark</th>
                 <th>Submission Date</th>
             </tr>
-            <% for (let s of submissions) { %>
+            <% for (let s of submissions) { console.log(s);%>
                 <tr>
                     <td><%= s.ID %></td>
                     <td><%= s.NAME %></td>
                     <td><%= s.USERNAME %></td>
                     <td><%= s.CODE || "-" %></td>
-                    <td><%= s.SUBMITTED ? "Yes" : "No" %></td>
+                    <td><%= s.MARK || "-" %></td>
                     <td><%= s.SUBMITDATE || "-" %></td>
                 </tr>
             <% } %>

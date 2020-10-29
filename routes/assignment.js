@@ -55,16 +55,9 @@ function runPythonCode(code, inputs) {
 
 
 router.get("/:id", async (req, res, next) => {
-    let assignments = await db.getUserAssignments(req.session.userID);
-    if (assignments.length) {
-        for (let a in assignments) {
-            let assignment = assignments[a];
-            if (assignment.ID == req.params.id) {
-                res.render("pages/assignment", { assignment: assignment, code: undefined, console: undefined });
-                return;
-            }
-        }
-        next();
+    let assignment = await db.getUserAssignment(req.session.userID, req.params.id);
+    if (assignment) {
+        res.render("pages/assignment", { assignment: assignment, code: assignment.CODE, console: undefined });
     } else {
         next();
     }
@@ -103,10 +96,7 @@ router.post("/run", async (req, res) => {
         else con.failed++;
     }
 
-    if (con.passed > 0 && con.failed == 0) {
-        // Submit working code to database
-        db.updateSubmission(req.body.code, assignment.ID);
-    }
+    db.updateSubmission(req.body.code, `${con.passed}/${con.passed+con.failed}`, assignment.ID);
 
     res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: con });
 });
