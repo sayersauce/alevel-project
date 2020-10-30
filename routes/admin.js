@@ -68,42 +68,42 @@ router.get("/assignment/:id", async (req, res) => {
 
 router.post("/createtoken", (req, res) => {
     db.createToken(req.body.className);
-    res.redirect("/admin");
+    res.redirect("/admin/classes")
 });
 
 router.post("/createassignment", (req, res) => {
     db.createAssignment(req.body.title, req.body.desc, req.body.hints, req.session.userID, req.body.startCode, req.body.testCode, new Date(req.body.date).toISOString());
-    res.redirect("/admin");
+    res.redirect("/admin/assignments");
 });
 
 router.post("/createtest", (req, res) => {
     db.createTest(req.body.assignment, req.body.inputs, req.body.outputs, !!req.body.visible);
-    res.redirect("/admin");
+    res.redirect("/admin/assignments");
 });
 
 router.post("/assignuser", (req, res) => {
     db.assignToUser(req.body.user, req.body.assignment);
-    res.redirect("/admin");
+    res.redirect("/admin/assignments");
 });
 
 router.post("/deluser", (req, res) => {
     db.deleteUser(req.body.id);
-    res.redirect("/admin");
+    res.redirect("/admin/tables");
 });
 
 router.post("/deltoken", (req, res) => {
     db.deleteToken(req.body.token);
-    res.redirect("/admin");
+    res.redirect("/admin/tables");
 });
 
 router.post("/delassignment", (req, res) => {
     db.deleteAssignment(req.body.id);
-    res.redirect("/admin");
+    res.redirect("/admin/tables");
 });
 
 router.post("/deltest", (req, res) => {
     db.deleteTest(req.body.id);
-    res.redirect("/admin");
+    res.redirect("/admin/tables");
 });
 
 module.exports = router;

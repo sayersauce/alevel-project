@@ -96,7 +96,7 @@ router.post("/run", async (req, res) => {
         else con.failed++;
     }
 
-    db.updateSubmission(req.body.code, `${con.passed}/${con.passed+con.failed}`, assignment.ID);
+    db.updateSubmission(req.body.code, `${con.passed}/${con.passed+con.failed}`, req.session.userID, assignment.ID);
 
     res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: con });
 });

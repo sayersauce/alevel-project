@@ -286,7 +286,6 @@ function getUserAssignment(user, assignment) {
     return new Promise((resolve, reject) => {
         db.get("SELECT * FROM Submissions INNER JOIN Assignments WHERE Submissions.ID=? AND Assignments.ID = Submissions.ASSIGNMENT AND Submissions.USER=?", [assignment, user], (err, rows) => {
             if (err) return reject(err);
-            console.log(rows)
             resolve(rows);
         });
     });
@@ -297,7 +296,6 @@ function getUserAssignments(id) {
     return new Promise((resolve, reject) => {
         db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITDATE IS NULL AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
             if (err) return reject(err);
-            console.log(rows)
             resolve(rows);
         });
     });
@@ -313,8 +311,8 @@ function getSubmissions() {
     });
 }
 
-function updateSubmission(code, mark, id) {
-    db.run("UPDATE Submissions SET CODE = ?, MARK = ?, SUBMITDATE = ?  WHERE ID = ?", [code, mark, new Date().toISOString(), id], (err) => {
+function updateSubmission(code, mark, user, assignment) {
+    db.run("UPDATE Submissions SET CODE = ?, MARK = ?, SUBMITDATE = ?  WHERE USER = ? AND ASSIGNMENT = ?", [code, mark, new Date().toISOString(), user, assignment], (err) => {
         if (err) console.error(err);
     })
 }
