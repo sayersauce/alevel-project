@@ -26,6 +26,32 @@ router.get("/assignments", async (req, res) => {
     res.render("pages/admin/assignments", { users: users, assignments: assignments });
 });
 
+router.get("/csv", async (req, res) => {
+    // Sending CSV file of all submissions
+    let submissions = await db.getSubmissions();
+    let assignments = await db.getAssignments();
+    let assignmentTitles = [];
+
+    for (let a of assignments) {
+        assignmentTitles.push(a.NAME);
+    }
+
+    let csv = "Firstname,Surname,Class," + assignmentTitles.join();
+
+    for (let s of submissions) {
+        csv += "\n" + [s.FIRSTNAME,s.LASTNAME,s.CLASS].join() + ",";
+        for (let title of assignmentTitles) {
+            if (title == s.NAME) {
+                csv += s.MARK + ",";
+            } else {
+                csv += ",";
+            }
+        }
+    }
+
+    res.attachment("marks.csv").send(csv);
+});
+
 router.get("/tables", async (req, res) => {
     let users = await db.getUsers();
     let classes = await db.getClasses();

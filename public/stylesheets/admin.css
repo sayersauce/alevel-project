@@ -33,3 +33,17 @@ legend {
 .assignment * {
     margin-right: 10px;
 }
+
+#csv {
+    border-radius: 10px;
+    padding: 20px;
+    margin: 100px 0 0 10px;
+    background-color: lightblue;
+    color: white;
+    font-weight: bold;
+    transition: background-color 400ms;
+}
+
+#csv:hover {
+    background-color: lightskyblue;
+}
