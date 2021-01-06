@@ -66,6 +66,14 @@ function init(){
         );
     `);
 
+    db.run(`
+        CREATE TABLE IF NOT EXISTS ClassAssignments (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            CLASSNAME TEXT,
+            ASSIGNMENT INTEGER REFERENCES Assignments(ID)
+        );
+    `);
+
     //db.run(`INSERT INTO Classes(TOKEN, NAME) VALUES("admins", "admins")`);
 }
 
@@ -90,7 +98,16 @@ function insertUser(username, firstname, lastname, hash, token) {
         let className = await getClass(token);
         if (className) {
             let datetime = new Date().toISOString();
-            db.run("INSERT INTO Users(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?, ?)", [firstname, lastname, username, hash, className, datetime, datetime]);
+            db.run("INSERT INTO Users(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?, ?)", [firstname, lastname, username, hash, className, datetime, datetime], async function(err) {
+                if (err) console.error(err);
+
+                let assignments = await getClassAssignments(className);
+                for (let assignment of assignments) {
+                    assignToUser(this.lastID, assignment.ASSIGNMENT);
+                }
+            });
+            
+            
             resolve(true);
         } else {
             resolve(false);
@@ -271,6 +288,51 @@ function deleteAssignment(id) {
 }
 
 
+// Class Assignments
+
+
+function assignToClass(className, assignmentID) {
+    // Assigns an assignment to a class of users
+    db.all("SELECT * FROM Users WHERE Class=?", className, (err, rows) =>{
+        if (err) console.error(err);
+
+        for (let user of rows) {
+            assignToUser(user.ID, assignmentID);
+        }
+    });
+
+    db.run("INSERT INTO ClassAssignments(CLASSNAME, ASSIGNMENT) VALUES(?, ?)", [className, assignmentID], (err) => {
+        if (err) console.error(err);
+    });
+}
+
+function getAllClassAssignments() {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM ClassAssignments JOIN Assignments ON ClassAssignments.ASSIGNMENT = Assignments.ID", (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+function getClassAssignments(className) {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM ClassAssignments WHERE CLASSNAME=?", className, (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+function deleteClassAssignment(id) {
+    db.run("DELETE FROM ClassAssignments WHERE ID=?", id, (err) => {
+        if (err) {
+            console.error(err);
+        }
+    });
+}
+
+
 // Assignment Submissions
 
 
@@ -385,6 +447,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignment, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignment, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment, assignToClass, getAllClassAssignments, getClassAssignments, deleteClassAssignment};
 
 init();

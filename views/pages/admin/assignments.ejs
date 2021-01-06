@@ -63,6 +63,23 @@
             </fieldset>
         </form>
 
+        <form method="POST" action="/admin/assignclass">
+            <fieldset>
+                <legend>Assign an Assignment to a Class</legend>
+                <select name="class" required>
+                    <% for (let c of classes) { %>
+                        <option value="<%= c.NAME %>"><%= c.NAME %></option>
+                    <% } %>
+                </select><br>
+                <select name="assignment" required>
+                    <% for (let assignment of assignments) { %>
+                        <option value="<%= assignment.ID %>"><%= assignment.NAME %></option>
+                    <% } %>
+                </select><br>
+                <input type="submit" value="Assign to Class">
+            </fieldset>
+        </form>
+
     </div>
     <%- include ("../../partials/footer") %>
 </body>

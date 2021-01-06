@@ -22,8 +22,9 @@ router.get("/", async (req, res) => {
 router.get("/assignments", async (req, res) => {
     let users = await db.getUsers();
     let assignments = await db.getAssignments();
+    let classes = await db.getClasses();
 
-    res.render("pages/admin/assignments", { users: users, assignments: assignments });
+    res.render("pages/admin/assignments", { users: users, assignments: assignments, classes: classes });
 });
 
 router.get("/csv", async (req, res) => {
@@ -58,8 +59,9 @@ router.get("/tables", async (req, res) => {
     let assignments = await db.getAssignments();
     let submissions = await db.getSubmissions();
     let tests = await db.getTests();
+    let classAssignments = await db.getAllClassAssignments();
 
-    res.render("pages/admin/tables", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests });
+    res.render("pages/admin/tables", { users: users, classes: classes, assignments: assignments, submissions: submissions, tests: tests, classAssignments: classAssignments });
 });
 
 router.get("/classes", async (req, res) => {
@@ -76,13 +78,6 @@ router.get("/classes", async (req, res) => {
     }
 
     res.render("pages/admin/classes", { classes: classes, classObj: dict });
-});
-
-router.get("/assignments", async (req, res) => {
-    let users = await db.getUsers();
-    let assignments = await db.getAssignments();
-
-    res.render("pages/admin/assignments", { users: users, assignments: assignments });
 });
 
 router.get("/assignment/:id", async (req, res) => {
@@ -112,6 +107,11 @@ router.post("/assignuser", (req, res) => {
     res.redirect("/admin/assignments");
 });
 
+router.post("/assignclass", (req, res) => {
+    db.assignToClass(req.body.class, req.body.assignment);
+    res.redirect("/admin/assignments");
+});
+
 router.post("/deluser", (req, res) => {
     db.deleteUser(req.body.id);
     res.redirect("/admin/tables");
@@ -119,6 +119,11 @@ router.post("/deluser", (req, res) => {
 
 router.post("/deltoken", (req, res) => {
     db.deleteToken(req.body.token);
+    res.redirect("/admin/tables");
+});
+
+router.post("/delclassassignment", (req, res) => {
+    db.deleteClassAssignment(req.body.id);
     res.redirect("/admin/tables");
 });
 

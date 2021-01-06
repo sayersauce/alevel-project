@@ -61,6 +61,27 @@
         </table>
 
         <table>
+            <h3>Class Assignments</h3>
+            <tr>
+                <th>Class</th>
+                <th>Assignment</th>
+                <th></th>
+            </tr>
+            <% for (let ca of classAssignments) { %>
+                <tr>
+                    <td><%= ca.CLASSNAME %></td>
+                    <td><%= ca.NAME %></td>
+                    <td>
+                        <form method="POST" action="/admin/delclassassignment">
+                            <input type="hidden" name="id" value="<%= ca.ID %>">
+                            <input class="x" type="submit" value="x">
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        </table>
+
+        <table>
             <h3>Assignments</h3>
             <tr>
                 <th>ID</th>
