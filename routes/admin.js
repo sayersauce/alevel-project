@@ -2,6 +2,7 @@
  * Admin Page Router
  */
 
+const e = require("express");
 const db = require("../database");
 const router = require("express").Router();
 
@@ -39,15 +40,41 @@ router.get("/csv", async (req, res) => {
 
     let csv = "Firstname,Surname,Class," + assignmentTitles.join();
 
+    let users = {};
+
     for (let s of submissions) {
-        csv += "\n" + [s.FIRSTNAME,s.LASTNAME,s.CLASS].join() + ",";
+        if (!(s.USER in users)) {
+            users[s.USER] = {};
+        }
+
+        let user = users[s.USER];
+        
+        user["FIRSTNAME"] = s.FIRSTNAME;
+        user["LASTNAME"] = s.LASTNAME;
+        user["CLASS"] = s.CLASS;
+        
         for (let title of assignmentTitles) {
             if (title == s.NAME) {
-                csv += s.MARK + ",";
-            } else {
-                csv += ",";
+                if (s.MARK == null) {
+                    user[title] = "incomplete";
+                } else {
+                    user[title] = s.MARK;
+                }
             }
         }
+    }
+    
+    for (const [id, user] of Object.entries(users)) {
+        csv += "\n" + [user.FIRSTNAME, user.LASTNAME, user.CLASS].join() + ",";
+        assignmentTitles.forEach((title, i) => {
+            if (title in user) {
+                csv += user[title];
+            }
+            if (i != assignmentTitles.length - 1) {
+                csv += ",";
+            }
+        });
+        
     }
 
     res.attachment("marks.csv").send(csv);
