@@ -12,9 +12,25 @@
             <% for (let a of assignments) { %>
                 <a href= "/assignment/<%= a.ID %>">
                     <div class="assignment">
-                        <h4><%= a.NAME %></h4>
-                        <p><%= a.DESC %></p>
-                        <p>Due on <%= new Date(a.DUEDATE).toLocaleString() %></p>    
+                        <% if (a.MARK != null) { %>
+                            <% if (eval(a.MARK) == 1) { %>
+                                <h4><%= a.NAME %> ✔️</h4>
+                                <p><%= a.DESC %></p>
+                                <em style="color: limegreen;">You have submitted this assignment with full marks! (A score of <%= a.MARK %>)</em>
+                            <% } else if (eval(a.MARK) > 0) { %>
+                                <h4><%= a.NAME %> ✔️</h4>
+                                <p><%= a.DESC %></p>
+                                <em style="color: gold;">You have submitted this assignment with a score of <%= a.MARK %>.</em>
+                            <% } else { %>
+                                <h4><%= a.NAME %> ❌</h4>
+                                <p><%= a.DESC %></p>
+                                <em style="color: red;">You have submitted this assignment with a score of <%= a.MARK %>.</em>
+                            <% } %>
+                        <% } else { %>
+                            <h4><%= a.NAME %></h4>
+                            <p><%= a.DESC %></p>
+                            <em style="color: red;">You haven't attempted this assignment yet.</em>
+                        <% } %>
                     </div>
                 </a>
             <% } %>

@@ -356,7 +356,7 @@ function getUserAssignment(user, assignment) {
 function getUserAssignments(id) {
     // Retrieves all assignments from the Assignments table for a user based on unsubmitted submissions in the Submissions table
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.SUBMITDATE IS NULL AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
+        db.all("SELECT * FROM Assignments INNER JOIN Submissions WHERE Submissions.USER=? AND Submissions.ASSIGNMENT = Assignments.ID", id, (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });

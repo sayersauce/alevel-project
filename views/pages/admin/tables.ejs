@@ -44,18 +44,11 @@
             <tr>
                 <th>Token</th>
                 <th>Class Name</th>
-                <th></th>
             </tr>
             <% for (let c of classes) { %>
                 <tr>
                     <td><%= c.TOKEN %></td>
                     <td><%= c.NAME %></td>
-                    <td>
-                        <form method="POST" action="/admin/deltoken">
-                            <input type="hidden" name="token" value="<%= c.TOKEN %>">
-                            <input class="x" type="submit" value="x">
-                        </form>
-                    </td>
                 </tr>
             <% } %>
         </table>

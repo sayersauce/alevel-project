@@ -95,8 +95,11 @@ router.post("/run", async (req, res) => {
         if (pass) con.passed++;
         else con.failed++;
     }
+    let mark = `${con.passed}/${con.passed+con.failed}`;
 
-    db.updateSubmission(req.body.code, `${con.passed}/${con.passed+con.failed}`, req.session.userID, assignment.ID);
+    db.updateSubmission(req.body.code, mark, req.session.userID, assignment.ID);
+
+    assignment.MARK = mark;
 
     res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: con });
 });

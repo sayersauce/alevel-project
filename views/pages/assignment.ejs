@@ -28,7 +28,17 @@
             <h1 id="assignment-title"><%- assignment.NAME %></h1>
             <p><%- assignment.DESC %></p>
             <i>Hints: <%- assignment.HINTS %></i>
-            <p>Due on <%= new Date(assignment.DUEDATE).toLocaleString() %></p>
+            <p>
+                <% if (assignment.MARK != null) {  %>
+                    <% if (eval(assignment.MARK) == 1) { %>
+                        <%- `Current mark: <strong style="color: limegreen">${assignment.MARK}</strong>` %>
+                    <% } else if (eval(assignment.MARK) > 0) { %>
+                        <%- `Current mark: <strong style="color: gold">${assignment.MARK}</strong>` %>
+                    <% } else { %>
+                        <%- `Current mark: <strong style="color: red">${assignment.MARK}</strong>` %>
+                    <% } %>
+                <% } %>    
+            </p>
         </div>
         <textarea id="text" rows="30" cols="120"><%- code %></textarea>
         <p id="console">
