@@ -42,3 +42,18 @@ input[type=submit] {
     resize: vertical;
     height: 300px;
 }
+
+#back {
+    color: #999;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 5px 8px;
+    position: relative;
+    top: 55px;
+    font-size: 0.75em;
+    transition: background-color 200ms;
+}
+
+#back:hover {
+    background-color: #e5e5e5;
+}

@@ -6,6 +6,8 @@ const forms = document.getElementsByTagName("form");
 const formInputs = document.getElementsByClassName("code");
 const ide = document.getElementById("text");
 
+ide.spellcheck = false;
+
 ide.onkeydown = e => {
     if(e.keyCode == 9 || e.which==9){
         e.preventDefault();
