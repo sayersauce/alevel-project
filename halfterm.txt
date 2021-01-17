@@ -1,3 +1,0 @@
-Add firstname and surname to login/user information ✔️
-Download csv format (firstname,surname,class,question1,question2,questionn...) ✔️
-Admin screen `download marks` gives list of all questions on system, select which go into csv

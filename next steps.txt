@@ -1,7 +1,0 @@
-Work on /admin/assignments page
-Previous assignments
-Submit button
-Update admin page (assignment page, class page etc)
-Assignment to class (not just user)
-Don't allow more tests to be created after assignment has been published
-Publish button for assignment

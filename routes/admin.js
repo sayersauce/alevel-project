@@ -6,6 +6,49 @@ const e = require("express");
 const db = require("../database");
 const router = require("express").Router();
 
+
+async function marks() {
+    let submissions = await db.getSubmissions();
+    let assignments = await db.getAssignments();
+    let tests = await db.getTests();
+    let titles = [];
+    let maxMarks = [];
+
+    for (let a of assignments) {
+        titles.push(a.NAME);
+        maxMarks.push(tests.filter(el => {
+            return el.ASSIGNMENT == a.ID;
+        }).length);
+    }
+
+    let users = {};
+
+    for (let s of submissions) {
+        if (!(s.USER in users)) {
+            users[s.USER] = {};
+        }
+
+        let user = users[s.USER];
+        
+        user["FIRSTNAME"] = s.FIRSTNAME;
+        user["LASTNAME"] = s.LASTNAME;
+        user["CLASS"] = s.CLASS;
+        
+        for (let title of titles) {
+            if (title == s.NAME) {
+                if (s.MARK == null) {
+                    user[title] = "incomplete";
+                } else {
+                    user[title] = (s.MARK).substring(0, (s.MARK).indexOf("/"));
+                }
+            }
+        }
+    }
+
+    return { titles: titles, maxMarks: maxMarks, users: users };
+}
+
+
 router.use((req, res, next) => {
     // Verify that the user is an admin
     if (req.session.admin) {
@@ -81,7 +124,6 @@ router.get("/csv", async (req, res) => {
                 csv += ",";
             }
         });
-        
     }
 
     res.attachment("marks.csv").send(csv);
@@ -112,6 +154,14 @@ router.get("/classes", async (req, res) => {
     }
 
     res.render("pages/admin/classes", { classes: classes, classObj: dict });
+});
+
+router.get("/mark-data", async (req, res) => {
+    res.json(await marks());
+});
+
+router.get("/marks", async (req, res) => {
+    res.render("pages/admin/marks");
 });
 
 router.get("/assignment/:id", async (req, res) => {
