@@ -32,13 +32,18 @@ router.get("/csv", async (req, res) => {
     // Sending CSV file of all submissions
     let submissions = await db.getSubmissions();
     let assignments = await db.getAssignments();
+    let tests = await db.getTests();
     let assignmentTitles = [];
+    let assignmentMaxMarks = [];
 
     for (let a of assignments) {
         assignmentTitles.push(a.NAME);
+        assignmentMaxMarks.push(tests.filter(el => {
+            return el.ASSIGNMENT == a.ID;
+        }).length);
     }
 
-    let csv = "Firstname,Surname,Class," + assignmentTitles.join();
+    let csv = "Firstname,Surname,Class," + assignmentTitles.join() + "\n,,," + assignmentMaxMarks.join();
 
     let users = {};
 
@@ -58,7 +63,7 @@ router.get("/csv", async (req, res) => {
                 if (s.MARK == null) {
                     user[title] = "incomplete";
                 } else {
-                    user[title] = s.MARK;
+                    user[title] = (s.MARK).substring(0, (s.MARK).indexOf("/"));
                 }
             }
         }
@@ -69,6 +74,8 @@ router.get("/csv", async (req, res) => {
         assignmentTitles.forEach((title, i) => {
             if (title in user) {
                 csv += user[title];
+            } else {
+                csv += "unassigned";
             }
             if (i != assignmentTitles.length - 1) {
                 csv += ",";

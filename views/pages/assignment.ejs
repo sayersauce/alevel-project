@@ -2,22 +2,6 @@
 <html lang="en">
 <head>
     <%- include ("../partials/head") %>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            margin: 0;
-        }
-
-        b {
-            color: white;
-            font-size: 1.5em;
-        }
-    </style>
     <script defer src="/scripts/assignment.js"></script>
     <link rel="stylesheet" href="/stylesheets/assignments.css">
 </head>
@@ -29,17 +13,6 @@
             <h1 id="assignment-title"><%- assignment.NAME %></h1>
             <p><%- assignment.DESC %></p>
             <i>Hints: <%- assignment.HINTS %></i>
-            <p>
-                <% if (assignment.MARK != null) {  %>
-                    <% if (eval(assignment.MARK) == 1) { %>
-                        <%- `Current mark: <strong style="color: limegreen">${assignment.MARK}</strong>` %>
-                    <% } else if (eval(assignment.MARK) > 0) { %>
-                        <%- `Current mark: <strong style="color: gold">${assignment.MARK}</strong>` %>
-                    <% } else { %>
-                        <%- `Current mark: <strong style="color: red">${assignment.MARK}</strong>` %>
-                    <% } %>
-                <% } %>    
-            </p>
         </div>
         <textarea id="text" rows="30" cols="120"><%- code %></textarea>
         <p id="console">
@@ -53,10 +26,29 @@
             <% } %>
         </p>
         <div id="buttons">
+            <p id="current-mark">
+                <% if (assignment.MARK != null) {  %>
+                    <% if (eval(assignment.MARK) == 1) { %>
+                        <%- `Current mark: <strong style="color: limegreen">${assignment.MARK}</strong>` %>
+                    <% } else if (eval(assignment.MARK) > 0) { %>
+                        <%- `Current mark: <strong style="color: gold">${assignment.MARK}</strong>` %>
+                    <% } else { %>
+                        <%- `Current mark: <strong style="color: red">${assignment.MARK}</strong>` %>
+                    <% } %>
+                <% } %>    
+            </p>
+            <% if (!submitted) { %>
+                <em style="color: #aaa;">You have unsubmitted code.</em>
+            <% } %>
             <form method="POST" action="/assignment/run">
-                <input type="hidden" name="code" class="code"><br>
-                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>"><br>
-                <input type="submit" value="Run Code">
+                <input type="hidden" name="code" class="code">
+                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>">
+                <input type="submit" value="Run 🏃">
+            </form>
+            <form method="POST" action="/assignment/submit">
+                <input type="hidden" name="code" class="code">
+                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>">
+                <input type="submit" value="Submit 📝">
             </form>
         </div>
     </div>

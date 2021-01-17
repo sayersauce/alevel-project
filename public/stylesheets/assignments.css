@@ -1,15 +1,20 @@
-.assignment {
-    transition: background-color 200ms;
-    padding: 10px 20px;
-    background: #fafafa;
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.assignment h4 {
-    margin-top: 5px;
+header {
+    margin: 0;
 }
 
-.assignment:hover {
-    background: #f6f6f6;
+b {
+    color: white;
+    font-size: 1.5em;
+}
+
+textarea {
+    margin-top: 20px;
 }
 
 #info {
@@ -23,7 +28,21 @@
 #buttons {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     width: 100%;
+}
+
+#buttons p, #buttons em {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#buttons em {
+    margin-right: 10px;
+}
+
+#current-mark {
+    margin-right: auto;
 }
 
 input[type=submit] {
@@ -44,7 +63,7 @@ input[type=submit] {
 }
 
 #back {
-    color: #999;
+    color: #444;
     background-color: #eee;
     border: 1px solid #ddd;
     padding: 5px 8px;
@@ -56,4 +75,8 @@ input[type=submit] {
 
 #back:hover {
     background-color: #e5e5e5;
+}
+
+form {
+    margin: 10px 0;
 }

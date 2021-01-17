@@ -57,7 +57,7 @@ function runPythonCode(code, inputs) {
 router.get("/:id", async (req, res, next) => {
     let assignment = await db.getUserAssignment(req.session.userID, req.params.id);
     if (assignment) {
-        res.render("pages/assignment", { assignment: assignment, code: assignment.CODE, console: undefined });
+        res.render("pages/assignment", { assignment: assignment, code: assignment.CODE, console: undefined, submitted: true });
     } else {
         next();
     }
@@ -95,13 +95,50 @@ router.post("/run", async (req, res) => {
         if (pass) con.passed++;
         else con.failed++;
     }
+    assignment.MARK = `${con.passed}/${con.passed+con.failed}`;
+
+    res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: con, submitted: false });
+});
+
+router.post("/submit", async (req, res) => {
+    const assignment = JSON.parse(req.body.assignment);
+    let tests = await db.getAssignmentTests(assignment.ASSIGNMENT);
+    let con = {
+        title: "Tests",
+        passed: 0,
+        failed: 0,
+        lines: []
+    }
+
+    for (let i = 0; i < tests.length; i++) {
+        let test = tests[i];
+        let codeOutput = await runPythonCode(req.body.code, test.INPUTS);
+        let pass = false;
+
+        // Checking if correct outputs are given
+        for (let output of [test.OUTPUTS]) {
+            for (let line of codeOutput) {
+                if (line.includes(output)) pass = true;
+            }
+        }
+
+        if (test.VISIBLE) {
+            con.lines = [...con.lines, `Test ${i + 1} with inputs ${test.INPUTS} and expected ouputs ${test.OUTPUTS}:`, ...codeOutput];
+
+            if (pass) con.lines.push("✔️", "");
+            else con.lines.push("❌", "");
+        }
+
+        if (pass) con.passed++;
+        else con.failed++;
+    }
     let mark = `${con.passed}/${con.passed+con.failed}`;
 
     db.updateSubmission(req.body.code, mark, req.session.userID, assignment.ID);
 
     assignment.MARK = mark;
 
-    res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: con });
+    res.render("pages/assignment", { assignment: assignment, code: req.body.code, console: con, submitted: true });
 });
 
 module.exports = router;

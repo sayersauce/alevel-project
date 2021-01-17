@@ -1,0 +1,14 @@
+.assignment {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin: 10px 0;
+    transition: 200ms background-color;
+}
+
+.assignment:hover {
+    background-color: #f0f0f0;
+}
+
+.assignment h4 {
+    margin: 0;
+}
