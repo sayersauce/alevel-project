@@ -82,7 +82,7 @@ router.get("/csv", async (req, res) => {
     for (let a of assignments) {
         assignmentTitles.push(a.NAME);
         assignmentMaxMarks.push(tests.filter(el => {
-            return el.ASSIGNMENT == a.ID;
+            return el.AssignmentID == a.ID;
         }).length);
     }
 
