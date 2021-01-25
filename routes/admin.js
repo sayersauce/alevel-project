@@ -91,11 +91,11 @@ router.get("/csv", async (req, res) => {
     let users = {};
 
     for (let s of submissions) {
-        if (!(s.USER in users)) {
-            users[s.USER] = {};
+        if (!(s.USERNAME in users)) {
+            users[s.USERNAME] = {};
         }
 
-        let user = users[s.USER];
+        let user = users[s.USERNAME];
         
         user["FIRSTNAME"] = s.FIRSTNAME;
         user["LASTNAME"] = s.LASTNAME;
