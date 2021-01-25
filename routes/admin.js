@@ -37,7 +37,7 @@ async function marks() {
         for (let title of titles) {
             if (title == s.NAME) {
                 if (s.MARK == null) {
-                    user[title] = "incomplete";
+                    user[title] = "#";
                 } else {
                     user[title] = (s.MARK).substring(0, (s.MARK).indexOf("/"));
                 }
@@ -104,7 +104,7 @@ router.get("/csv", async (req, res) => {
         for (let title of assignmentTitles) {
             if (title == s.NAME) {
                 if (s.MARK == null) {
-                    user[title] = "incomplete";
+                    user[title] = "#";
                 } else {
                     user[title] = (s.MARK).substring(0, (s.MARK).indexOf("/"));
                 }
