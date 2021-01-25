@@ -308,7 +308,7 @@ function assignToClass(className, assignmentID) {
 
 function getAllClassAssignments() {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM ClassAssignments JOIN Assignments ON ClassAssignments.ASSIGNMENT = Assignments.ID", (err, rows) => {
+        db.all("SELECT ClassAssignments.ID, ClassAssignments.CLASSNAME, Assignments.NAME FROM ClassAssignments JOIN Assignments ON ClassAssignments.ASSIGNMENT = Assignments.ID", (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });
