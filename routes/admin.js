@@ -17,18 +17,18 @@ async function marks() {
     for (let a of assignments) {
         titles.push(a.NAME);
         maxMarks.push(tests.filter(el => {
-            return el.ASSIGNMENT == a.ID;
+            return el.AssignmentID == a.ID;
         }).length);
     }
 
     let users = {};
 
     for (let s of submissions) {
-        if (!(s.USER in users)) {
-            users[s.USER] = {};
+        if (!(s.USERNAME in users)) {
+            users[s.USERNAME] = {};
         }
 
-        let user = users[s.USER];
+        let user = users[s.USERNAME];
         
         user["FIRSTNAME"] = s.FIRSTNAME;
         user["LASTNAME"] = s.LASTNAME;

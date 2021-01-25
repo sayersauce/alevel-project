@@ -404,7 +404,7 @@ function getSubmissionsForAssignment(id) {
 function getTests() {
     // Retrieves all test rows from the Tests table
     return new Promise((resolve, reject) => {
-        db.all("SELECT Tests.ID, Assignments.NAME, INPUTS, OUTPUTS, VISIBLE FROM Tests INNER JOIN Assignments ON Tests.ASSIGNMENT = Assignments.ID", (err, rows) => {
+        db.all("SELECT Tests.ID, Assignments.ID AS AssignmentID, Assignments.NAME, INPUTS, OUTPUTS, VISIBLE FROM Tests INNER JOIN Assignments ON Tests.ASSIGNMENT = AssignmentID", (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });
