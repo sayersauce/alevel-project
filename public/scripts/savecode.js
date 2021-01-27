@@ -5,6 +5,10 @@
 const id = JSON.parse(document.getElementById("assignment").value).ID;
 let sent = true;
 
+ide.onkeyup = () => {
+    saveCode();
+}
+
 function saveCode() {
     if (sent == true) {
         sent = false;

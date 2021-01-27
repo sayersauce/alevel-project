@@ -1,9 +1,10 @@
 /**
- * Admin Marks Page AJAX
+ * Admin Marks Page
  */
 
 const table = document.getElementById("table");
 const timer = document.getElementById("timer");
+const search = document.getElementById("search");
 
 let receivedAt = null;
 
@@ -51,7 +52,7 @@ function updateTable(data) {
                     assignmentRows += "<td>" + mark + "</td>";
                 }
             } else {
-                assignmentRows += "<td>unassigned</td>";
+                assignmentRows += "<td></td>";
             }
         }
 
@@ -80,7 +81,34 @@ function updateTable(data) {
     </tr>
     ${userHTML}
     `
+    
+    filterTable();
+}
+
+function filterTable() {
+    let filterText = search.value.toLowerCase();
+
+    for (let i = 0; i < table.rows.length; i++) {
+        let row = table.rows[i];
+        if (i > 1) {
+            let match = false;
+
+            for (let cell of row.cells) {
+                let text = cell.innerText.toLowerCase();
+                if (text.includes(filterText)) {
+                    match = true;
+                }
+            }
+    
+            if (match == false) {
+                row.style.display = "none";
+            } else {
+                row.style.display = "table-row";
+            }
+        }
+    }
 }
 
 update();
 setInterval(update, 2000);
+search.onkeyup = filterTable;

@@ -19,7 +19,7 @@ function update() {
 }
 
 function updateCode(data) {
-    if (data !== textarea.innerHTML) {
+    if (data.replace(/\s/g, "") !== textarea.innerHTML.replace(/\s/g, "")) {
         textarea.innerHTML = data;
     }
 }
