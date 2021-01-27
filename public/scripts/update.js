@@ -21,7 +21,6 @@ function update() {
 }
 
 function updateTable(data) {
-
     receivedAt = new Date();
     json = JSON.parse(data);
     titleHTML = "";
@@ -43,7 +42,14 @@ function updateTable(data) {
 
         for (let title of json.titles) {
             if (title in user) {
-                assignmentRows += "<td>" + user[title] + "</td>";
+                let mark = user[title][0];
+                let submissionID = user[title][1];
+
+                if (submissionID != null) {
+                    assignmentRows += "<td>" + mark + "<a href='/admin/submission/" + submissionID + "' style='float:right;'>View</a></td>";
+                } else {
+                    assignmentRows += "<td>" + mark + "</td>";
+                }
             } else {
                 assignmentRows += "<td>unassigned</td>";
             }
@@ -74,16 +80,7 @@ function updateTable(data) {
     </tr>
     ${userHTML}
     `
-
-
-}
-
-function timestamp() {
-    if (receivedAt != null) {
-        timer.innerText = "Updated " + Math.ceil(Math.abs(new Date() - receivedAt) / (1000)) + " second(s) ago.";
-    }
 }
 
 update();
 setInterval(update, 2000);
-setInterval(timestamp, 1000);

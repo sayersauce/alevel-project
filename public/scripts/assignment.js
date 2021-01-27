@@ -17,6 +17,10 @@ ide.onkeydown = e => {
     }
 }
 
+ide.onkeyup = () => {
+    saveCode();
+}
+
 for (let form of forms) {
     form.onsubmit = e => {
         for (let input of formInputs) {

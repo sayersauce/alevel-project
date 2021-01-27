@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include ("../partials/head") %>
+    <%- include ("../../partials/head") %>
     <script defer src="/scripts/assignment.js"></script>
-    <script defer src="/scripts/savecode.js"></script>
+    <script defer src="/scripts/updateadminsubmission.js"></script>
     <link rel="stylesheet" href="/stylesheets/assignments.css">
 </head>
 <body>
-    <%- include ("../partials/nav") %>
+    <%- include ("../../partials/nav") %>
     <div>
         <div id="info">
-            <a href="/" id="back">Back to Assignments</a>
-            <h1 id="assignment-title"><%- assignment.NAME %></h1>
+            <h1><%- user.FIRSTNAME + " " + user.LASTNAME %></h1>
+            <h2><%- assignment.NAME %></h2>
             <p><%- assignment.DESC %></p>
             <i>Hints: <%- assignment.HINTS %></i>
         </div>
@@ -38,18 +38,10 @@
                     <% } %>
                 <% } %>    
             </p>
-            <% if (!submitted) { %>
-                <em style="color: #aaa;">You have unsubmitted code.</em>
-            <% } %>
-            <form method="POST" action="/assignment/run">
+            <form method="POST" action="/admin/submission/run">
                 <input type="hidden" name="code" class="code">
-                <input type="hidden" name="assignment" value="<%= JSON.stringify(assignment) %>">
-                <input type="submit" value="Run 🏃">
-            </form>
-            <form method="POST" action="/assignment/submit">
-                <input type="hidden" name="code" class="code">
-                <input type="hidden" name="assignment" id="assignment" value="<%= JSON.stringify(assignment) %>">
-                <input type="submit" value="Submit 📝">
+                <input type="hidden" name="submission" id="submission" value="<%= submission.ID %>">
+                <input type="submit" value="Test ⚙️">
             </form>
         </div>
     </div>

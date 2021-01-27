@@ -379,6 +379,12 @@ function updateSubmission(code, mark, user, assignment) {
     })
 }
 
+function updateSubmissionCode(code, user, assignment) {
+    db.run("UPDATE Submissions SET CODE = ? WHERE USER = ? AND ASSIGNMENT = ?", [code, user, assignment], (err) => {
+        if (err) console.error(err);
+    })
+}
+
 function getSubmissionsForAssignment(id) {
     return new Promise((resolve, reject) => {
         db.all("SELECT * FROM Assignments INNER JOIN Submissions ON Submissions.ASSIGNMENT = ? INNER JOIN Users ON Submissions.USER = Users.ID WHERE Assignments.ID = ?", [id, id], (err, rows) => {
@@ -388,9 +394,36 @@ function getSubmissionsForAssignment(id) {
     });
 }
 
-function getSubmissionsForAssignment(id) {
+function getSubmission(id) {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM Assignments INNER JOIN Submissions ON Submissions.ASSIGNMENT = ? INNER JOIN Users ON Submissions.USER = Users.ID WHERE Assignments.ID = ?", [id, id], (err, rows) => {
+        db.get("SELECT * FROM Submissions WHERE Submissions.ID = ?", id, (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+function getAssignmentForSubmission(id) {
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM Assignments INNER JOIN Submissions ON Submissions.ID = ? WHERE Assignments.ID = Submissions.ASSIGNMENT", id, (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+function getTestsForSubmission(id) {
+    return new Promise((resolve, reject) => {
+        db.all("SELECT * FROM Tests INNER JOIN Submissions ON Submissions.ID = ? WHERE Tests.ASSIGNMENT = Submissions.ASSIGNMENT", id, (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+function getUserForSubmission(id) {
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM Users INNER JOIN Submissions ON Submissions.ID = ? WHERE Users.ID = Submissions.USER", id, (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });
@@ -447,6 +480,6 @@ function deleteTest(id) {
 }
 
 
-module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignment, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment, assignToClass, getAllClassAssignments, getClassAssignments, deleteClassAssignment};
+module.exports = {getUsers, insertUser, getClass, getClasses, deleteUser, deleteToken, getUser, loginUser, createToken, updatePassword, createNewPassword, createAssignment, getAssignments, deleteAssignment, assignToUser, getUserAssignment, getUserAssignments, getSubmissions, getTests, createTest, deleteTest, getAssignmentTests, updateSubmission, getAssignment, getSubmissionsForAssignment, assignToClass, getAllClassAssignments, getClassAssignments, deleteClassAssignment, getSubmission, getAssignmentForSubmission, getTestsForSubmission, getUserForSubmission, updateSubmissionCode};
 
 init();

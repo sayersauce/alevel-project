@@ -5,6 +5,7 @@
 const e = require("express");
 const db = require("../database");
 const router = require("express").Router();
+const python = require("../code");
 
 
 async function marks() {
@@ -37,9 +38,9 @@ async function marks() {
         for (let title of titles) {
             if (title == s.NAME) {
                 if (s.MARK == null) {
-                    user[title] = "#";
+                    user[title] = ["#", null];
                 } else {
-                    user[title] = (s.MARK).substring(0, (s.MARK).indexOf("/"));
+                    user[title] = [(s.MARK).substring(0, (s.MARK).indexOf("/")), s.ID];
                 }
             }
         }
@@ -169,7 +170,33 @@ router.get("/assignment/:id", async (req, res) => {
     let submissions = await db.getSubmissionsForAssignment(req.params.id);
 
     res.render("pages/admin/assignment", { assignment: assignment, submissions: submissions });
-})
+});
+
+router.get("/submission/:id", async (req, res) => {
+    let submission = await db.getSubmission(req.params.id);
+    let assignment = await db.getAssignmentForSubmission(req.params.id);
+    let user = await db.getUserForSubmission(req.params.id);
+
+    res.render("pages/admin/submission", { assignment: assignment, code: assignment.CODE, console: undefined, submission: submission, user: user });
+});
+
+router.get("/submissioncode/:id", async (req, res) => {
+    let submission = await db.getSubmission(req.params.id);
+    res.send(submission.CODE);
+});
+
+router.post("/submission/run", async (req, res) => {
+    let submission = await db.getSubmission(req.body.submission);
+    let assignment = await db.getAssignmentForSubmission(req.body.submission);
+    let user = await db.getUserForSubmission(req.body.submission);
+    let tests = await db.getTestsForSubmission(req.body.submission);
+
+    let con = await python.testCode(tests, req.body.code);
+
+    assignment.MARK = `${con.passed}/${con.passed+con.failed}`;
+
+    res.render("pages/admin/submission", { assignment: assignment, code: assignment.CODE, console: con, submission: submission, user: user });
+});
 
 router.post("/createtoken", (req, res) => {
     db.createToken(req.body.className);
