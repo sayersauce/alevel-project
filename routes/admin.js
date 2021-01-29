@@ -74,57 +74,24 @@ router.get("/assignments", async (req, res) => {
 
 router.get("/csv", async (req, res) => {
     // Sending CSV file of all submissions
-    let submissions = await db.getSubmissions();
-    let assignments = await db.getAssignments();
-    let tests = await db.getTests();
-    let assignmentTitles = [];
-    let assignmentMaxMarks = [];
+    let csvData = await marks();
+    let csv = `Firstname,Surname,Class,${csvData.titles.join(",")}\n`;
+    csv += `,,,${csvData.maxMarks.join(",")}`;
 
-    for (let a of assignments) {
-        assignmentTitles.push(a.NAME);
-        assignmentMaxMarks.push(tests.filter(el => {
-            return el.AssignmentID == a.ID;
-        }).length);
-    }
+    for (let username in csvData.users) {
+        let user = csvData.users[username];
+        csv += `\n${user.FIRSTNAME},${user.LASTNAME},${user.CLASS},`
 
-    let csv = "Firstname,Surname,Class," + assignmentTitles.join() + "\n,,," + assignmentMaxMarks.join();
-
-    let users = {};
-
-    for (let s of submissions) {
-        if (!(s.USERNAME in users)) {
-            users[s.USERNAME] = {};
-        }
-
-        let user = users[s.USERNAME];
-        
-        user["FIRSTNAME"] = s.FIRSTNAME;
-        user["LASTNAME"] = s.LASTNAME;
-        user["CLASS"] = s.CLASS;
-        
-        for (let title of assignmentTitles) {
-            if (title == s.NAME) {
-                if (s.MARK == null) {
-                    user[title] = "#";
-                } else {
-                    user[title] = (s.MARK).substring(0, (s.MARK).indexOf("/"));
-                }
-            }
-        }
-    }
-    
-    for (const [id, user] of Object.entries(users)) {
-        csv += "\n" + [user.FIRSTNAME, user.LASTNAME, user.CLASS].join() + ",";
-        assignmentTitles.forEach((title, i) => {
+        let i = 0;
+        for (let title of csvData.titles) {
             if (title in user) {
-                csv += user[title];
-            } else {
-                csv += "unassigned";
+                csv += user[title][0];
             }
-            if (i != assignmentTitles.length - 1) {
+            if (i < csvData.titles.length - 1) {
                 csv += ",";
             }
-        });
+            i++;
+        }
     }
 
     res.attachment("marks.csv").send(csv);
