@@ -45,11 +45,11 @@ router.post("/login", async (req, res) => {
 
 router.post("/signup", async (req, res) => {
     // Attempt to sign the user up
-    let success = await db.insertUser(req.body.email, req.body.firstname, req.body.lastname, hashing.hash(req.body.password), req.body.token);
-    if (success) { 
+    try {
+        await db.insertUser(req.body.email, req.body.firstname, req.body.lastname, hashing.hash(req.body.password), req.body.token);
         res.render("pages/login", { message: "You have successfully signed up. Please log in." });
-    } else {
-        res.render("pages/signup", { message: "You have provided an invalid Access Code." });
+    } catch (err) {
+        res.render("pages/signup", { message: err });
     }
 });
 

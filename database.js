@@ -95,22 +95,22 @@ function getUsers() {
 function insertUser(username, firstname, lastname, hash, token) {
     // Check if user has provided a valid access token
     return new Promise(async (resolve, reject) => {
-        let className = await getClass(token);
-        if (className) {
+        try {
+            let className = await getClass(token);
+            if (!className) return reject("You have provided an invalid access code.");
+
             let datetime = new Date().toISOString();
             db.run("INSERT INTO Users(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, CLASS, REGISTERDATE, LOGINDATE) VALUES(?, ?, ?, ?, ?, ?, ?)", [firstname, lastname, username, hash, className, datetime, datetime], async function(err) {
-                if (err) console.error(err);
+                if (err) return reject("An account with this email address already exists.");
 
                 let assignments = await getClassAssignments(className);
                 for (let assignment of assignments) {
                     assignToUser(this.lastID, assignment.ASSIGNMENT);
                 }
+                resolve();
             });
-            
-            
-            resolve(true);
-        } else {
-            resolve(false);
+        } catch (err) {
+            return reject(err);
         }
     });
 }
@@ -344,9 +344,9 @@ function assignToUser(userID, assignmentID) {
 }
 
 function getUserAssignment(user, assignment) {
-    // Retrieves a single assignment from the Assignments table for a user based on an submission in the Submissions table
+    // Retrieves a single assignment from the Assignments table for a user based on a submission in the Submissions table
     return new Promise((resolve, reject) => {
-        db.get("SELECT * FROM Submissions INNER JOIN Assignments WHERE Submissions.ID=? AND Assignments.ID = Submissions.ASSIGNMENT AND Submissions.USER=?", [assignment, user], (err, rows) => {
+        db.get("SELECT * FROM Submissions INNER JOIN Assignments ON Submissions.ID=? AND Assignments.ID WHERE Submissions.ASSIGNMENT AND Submissions.USER=?", [assignment, user], (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });
