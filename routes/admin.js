@@ -111,7 +111,7 @@ router.get("/tables", async (req, res) => {
 router.get("/classes", async (req, res) => {
     let users = await db.getUsers();
     let classes = await db.getClasses();
-    let dict = {};
+    let dict = { "admins": [] };
 
     for (let c of classes) {
         dict[c.NAME] = [];

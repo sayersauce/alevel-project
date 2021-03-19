@@ -8,27 +8,20 @@ An [A Level][alevel] Computer Science project where students complete coding tas
 - [x] Sign-Up system with access codes
 - [x] Reset password
 - [x] Change password
-- [ ] Pages for users, classes, challenges set etc
-- [ ] Sandboxed Python server-side code execution
-- [ ] Server-side code testing and validation
-- [ ] Web-based IDE
-- [ ] User accounts divided into `groups` or `classes`
-- [ ] Code challenges
-- [ ] Code challenge responses `comments`, `feedback` etc
-- [ ] Linking to code submitted anonymously
-- [ ] Spreadsheet function for classes, users and scores with link to code
-
-## To Do
-- Fix multiple callbacks when retrieving data from database for admin page
-- Generally clean up code. Remove callback hell. Clean up indents etc
-- Better admin page css
-- Fix code editor and assignments in general
+- [x] Pages for users, classes, challenges set etc
+- [x] Sandboxed Python server-side code execution
+- [x] Server-side code testing and validation
+- [x] Web-based IDE
+- [x] User accounts divided into `groups` or `classes`
+- [x] Code challenges
+- [x] Code challenge responses `comments`, `feedback` etc
+- [x] Linking to code submitted anonymously
+- [x] Spreadsheet function for classes, users and scores with link to code
 
 ## Technologies Implemented
 - [x] Express.js
 - [x] EJS
 - [x] SQLite3
-- [ ] Socket.IO
 
 ## Config
 Configuration is stored in `config.json`.
