@@ -6,8 +6,10 @@ const forms = document.getElementsByTagName("form");
 const formInputs = document.getElementsByClassName("code");
 const ide = document.getElementById("text");
 
+// Disable spellchecking for ide element
 ide.spellcheck = false;
 
+// Check for tab key press and insert 4 spaces
 ide.onkeydown = e => {
     if(e.keyCode == 9 || e.which==9){
         e.preventDefault();
@@ -17,6 +19,7 @@ ide.onkeydown = e => {
     }
 }
 
+// Transport ide text to form inputs
 for (let form of forms) {
     form.onsubmit = e => {
         for (let input of formInputs) {
