@@ -58,7 +58,7 @@ router.post("/forgot", async (req, res) => {
     let user = await db.getUser(req.body.email);
     if (user) {
         let password = db.createNewPassword(user.USERNAME);
-        email.sendEmail(user.EMAIL, "New Password", `Hello ${user.USERNAME} your new password is ${password}.`)
+        email.sendEmail(user.USERNAME, "New Password", `Hello ${user.USERNAME} your new password is ${password}.`)
     }
     res.render("pages/login", { message: "If the email you have provided exists in our database, we have sent you a new password." })
 });
